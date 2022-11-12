@@ -1,0 +1,9 @@
+A collection of miscellaneous vanity items, focused on either unique effects or tiny accessories.
+Has support for Asymmetric Equips.
+
+Content Summary:
+* A set of items that allow the player to dye each part of their base player, including their skin, eyes, eye whites, and default clothing.
+* A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
+* A generic bracelet.
+
+All items in the mod can be purchased from various NPCs -- see the Workshop page for specifics.
