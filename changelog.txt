@@ -1,0 +1,1 @@
+[list][*]Fixed a bug where modded accessory slot handling would sometimes break the character select menu.[/list]

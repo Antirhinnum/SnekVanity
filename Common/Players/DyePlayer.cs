@@ -131,7 +131,7 @@ public sealed class DyePlayer : ModPlayer
 			{
 				if (loader.ModdedIsAValidEquipmentSlotForIteration(i, player))
 				{
-					ModAccessorySlot slot = loader.Get(i);
+					ModAccessorySlot slot = loader.Get(i, player);
 					UpdatePlayerBodyDye(player, true, slot.HideVisuals, slot.FunctionalItem, slot.DyeItem);
 					UpdatePlayerBodyDye(player, false, slot.HideVisuals, slot.VanityItem, slot.DyeItem);
 				}

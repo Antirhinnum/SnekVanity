@@ -63,33 +63,4 @@ public sealed class ForcedEyeStatePlayer : ModPlayer
 			fPlayer.eyeState = null;
 		}
 	}
-
-	//public override void UpdateVisibleVanityAccessories()
-	//{
-	//	for (int i = 0; i < Player.armor.Length; i++)
-	//	{
-	//		if (Player.IsAValidEquipmentSlotForIteration(i) && Player.armor[i].ModItem is IForceEyeState forceItem)
-	//		{
-	//			eyeState = forceItem;
-	//		}
-	//	}
-
-	//	if (Player.TryGetModPlayer(out ModAccessorySlotPlayer mPlayer))
-	//	{
-	//		int slots = mPlayer.SlotCount;
-	//		AccessorySlotLoader loader = LoaderManager.Get<AccessorySlotLoader>();
-	//		for (int i = 0; i < slots; i++)
-	//		{
-	//			if (loader.ModdedIsAValidEquipmentSlotForIteration(i, Player))
-	//			{
-	//				ModAccessorySlot slot = loader.Get(i, Player);
-	//				if (slot.FunctionalItem)
-	//			}
-	//		}
-	//	}
-	//}
-
-	public override void ResetEffects()
-	{
-	}
 }
