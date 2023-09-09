@@ -1,1 +1,2 @@
-[list][*]Fixed a bug where modded accessory slot handling would sometimes break the character select menu.[/list]
+[list][*][i]Actually[/i] fixed the bug where modded accessory slot handling would sometimes break the character select menu.
+[*]Added a Mod.Call method.[/list]

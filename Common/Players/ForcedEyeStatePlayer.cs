@@ -4,6 +4,8 @@ using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
+using On_Player = On.Terraria.Player;
+using On_PlayerEyeHelper = On.Terraria.GameContent.PlayerEyeHelper;
 
 namespace SnekVanity.Common.Players;
 
@@ -15,21 +17,21 @@ public sealed class ForcedEyeStatePlayer : ModPlayer
 	public override void Load()
 	{
 		_PlayerEyeHelper_EyeFrameToShow = typeof(PlayerEyeHelper).GetProperty(nameof(PlayerEyeHelper.EyeFrameToShow));
-		On.Terraria.Player.UpdateVisibleAccessory += UpdateAccessoryVisuals;
-		On.Terraria.GameContent.PlayerEyeHelper.UpdateEyeFrameToShow += ForceEyeState;
+		On_Player.UpdateVisibleAccessory += UpdateAccessoryVisuals;
+		On_PlayerEyeHelper.UpdateEyeFrameToShow += ForceEyeState;
 	}
 
 	public override void Unload()
 	{
 		_PlayerEyeHelper_EyeFrameToShow = null;
-		On.Terraria.Player.UpdateVisibleAccessory -= UpdateAccessoryVisuals;
-		On.Terraria.GameContent.PlayerEyeHelper.UpdateEyeFrameToShow -= ForceEyeState;
+		On_Player.UpdateVisibleAccessory -= UpdateAccessoryVisuals;
+		On_PlayerEyeHelper.UpdateEyeFrameToShow -= ForceEyeState;
 	}
 
 	/// <summary>
 	/// Updates <see cref="eyeState"/> when an accessory is visible.
 	/// </summary>
-	private static void UpdateAccessoryVisuals(On.Terraria.Player.orig_UpdateVisibleAccessory orig, Player self, int itemSlot, Item item, bool modded)
+	private static void UpdateAccessoryVisuals(On_Player.orig_UpdateVisibleAccessory orig, Player self, int itemSlot, Item item, bool modded)
 	{
 		orig(self, itemSlot, item, modded);
 
@@ -47,7 +49,7 @@ public sealed class ForcedEyeStatePlayer : ModPlayer
 	/// <summary>
 	/// Does exactly what it says on the tin.
 	/// </summary>
-	private static void ForceEyeState(On.Terraria.GameContent.PlayerEyeHelper.orig_UpdateEyeFrameToShow orig, ref PlayerEyeHelper self, Player player)
+	private static void ForceEyeState(On_PlayerEyeHelper.orig_UpdateEyeFrameToShow orig, ref PlayerEyeHelper self, Player player)
 	{
 		orig(ref self, player);
 

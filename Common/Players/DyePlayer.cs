@@ -5,7 +5,8 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Default;
+using On_Player = On.Terraria.Player;
+using On_PlayerDrawLayers = On.Terraria.DataStructures.PlayerDrawLayers;
 
 namespace SnekVanity.Common.Players;
 
@@ -73,22 +74,21 @@ public sealed class DyePlayer : ModPlayer
 
 	public override void Load()
 	{
-		On.Terraria.Player.UpdateDyes += ResetCustomDyes;
-		On.Terraria.DataStructures.PlayerDrawLayers.DrawPlayer_TransformDrawData += ModifyPlayerDyes;
+		On_Player.UpdateDyes += ResetCustomDyes;
+		On_Player.UpdateItemDye += UpdatePlayerDye;
+		On_PlayerDrawLayers.DrawPlayer_TransformDrawData += ModifyPlayerDyes;
 	}
 
 	public override void Unload()
 	{
-		On.Terraria.Player.UpdateDyes -= ResetCustomDyes;
-		On.Terraria.DataStructures.PlayerDrawLayers.DrawPlayer_TransformDrawData -= ModifyPlayerDyes;
+		On_Player.UpdateDyes -= ResetCustomDyes;
+		On_PlayerDrawLayers.DrawPlayer_TransformDrawData -= ModifyPlayerDyes;
 	}
 
 	/// <summary>
 	/// Reset the player's dyes alongside vanilla.
 	/// </summary>
-	/// <param name="orig"></param>
-	/// <param name="self"></param>
-	private static void ResetCustomDyes(On.Terraria.Player.orig_UpdateDyes orig, Player self)
+	private static void ResetCustomDyes(On_Player.orig_UpdateDyes orig, Player self)
 	{
 		if (self.TryGetModPlayer(out DyePlayer dPlayer))
 		{
@@ -110,46 +110,18 @@ public sealed class DyePlayer : ModPlayer
 	}
 
 	/// <summary>
-	/// A recreation of <see cref="Player.UpdateDyes"/> that only updates body dyes.
-	/// Without this, dyes are off by one frame when asymmetric.
-	/// </summary>
-	private static void UpdatePlayerBodyDyes(Player player)
-	{
-		for (int i = 0; i < player.armor.Length; i++)
-		{
-			if (player.IsAValidEquipmentSlotForIteration(i))
-			{
-				UpdatePlayerBodyDye(player, i < 10, player.hideVisibleAccessory[i % 10], player.armor[i], player.dye[i % 10]);
-			}
-		}
-
-		if (player.TryGetModPlayer(out ModAccessorySlotPlayer mPlayer))
-		{
-			int slots = mPlayer.SlotCount;
-			AccessorySlotLoader loader = LoaderManager.Get<AccessorySlotLoader>();
-			for (int i = 0; i < slots; i++)
-			{
-				if (loader.ModdedIsAValidEquipmentSlotForIteration(i, player))
-				{
-					ModAccessorySlot slot = loader.Get(i, player);
-					UpdatePlayerBodyDye(player, true, slot.HideVisuals, slot.FunctionalItem, slot.DyeItem);
-					UpdatePlayerBodyDye(player, false, slot.HideVisuals, slot.VanityItem, slot.DyeItem);
-				}
-			}
-		}
-	}
-
-	/// <summary>
 	/// Updates the player's body dyes from the given item.
 	/// </summary>
-	private static void UpdatePlayerBodyDye(Player player, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
+	private void UpdatePlayerDye(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
 	{
-		if ((isSetToHidden && isNotInVanitySlot) || !player.TryGetModPlayer(out DyePlayer dPlayer) || armorItem.ModItem is not ModItem modItem)
+		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
+
+		if ((isSetToHidden && isNotInVanitySlot) || !self.TryGetModPlayer(out DyePlayer dPlayer) || armorItem.ModItem is not ModItem modItem)
 		{
 			return;
 		}
 
-		if (!CrossModSystem.AsymmetricEquips_ItemOnFrontSide(armorItem, player))
+		if (!CrossModSystem.AsymmetricEquips_ItemOnFrontSide(armorItem, self))
 		{
 			return;
 		}
@@ -220,7 +192,7 @@ public sealed class DyePlayer : ModPlayer
 	/// <summary>
 	/// Applies the player's body dyes to their DrawData right before the player is drawn.
 	/// </summary>
-	private static void ModifyPlayerDyes(On.Terraria.DataStructures.PlayerDrawLayers.orig_DrawPlayer_TransformDrawData orig, ref PlayerDrawSet drawinfo)
+	private static void ModifyPlayerDyes(On_PlayerDrawLayers.orig_DrawPlayer_TransformDrawData orig, ref PlayerDrawSet drawinfo)
 	{
 		orig(ref drawinfo);
 
@@ -230,8 +202,6 @@ public sealed class DyePlayer : ModPlayer
 		{
 			return;
 		}
-
-		UpdatePlayerBodyDyes(player);
 
 		// Since assets are stored in one place, any body assets that show up in DrawDataCache will be references in TextureAssets.
 		static bool IsCorrectTexture(DrawData data, Player player, int playerTextureID) => data.texture == TextureAssets.Players[player.skinVariant, playerTextureID].Value;
