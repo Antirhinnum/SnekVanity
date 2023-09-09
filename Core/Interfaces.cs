@@ -135,5 +135,5 @@ public interface IAmSoldByVanillaNPC
 	/// <summary>
 	/// The condition under which this item is sold.
 	/// </summary>
-	bool Available => true;
+	Condition Available => null;
 }

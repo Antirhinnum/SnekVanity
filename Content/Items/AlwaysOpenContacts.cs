@@ -12,15 +12,9 @@ public sealed class AlwaysOpenContacts : ModItem, IForceEyeState, IAmAsymmetricS
 
 	int IAmSoldByVanillaNPC.NPC => NPCID.Stylist;
 
-	public override void SetStaticDefaults()
-	{
-		SacrificeTotal = 1;
-	}
-
 	public override void SetDefaults()
 	{
 		Item.accessory = true;
-		Item.canBePlacedInVanityRegardlessOfConditions = true;
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
 		Item.color = Color.Yellow;

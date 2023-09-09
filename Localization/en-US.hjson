@@ -1,90 +1,111 @@
-Mods.SnekVanity:
-{
-	ExtraTooltip:
-	{
-		PaintsAsDyesItem: "Can also be used as dye"
-	}
-	
-	ItemName:
-	{
-		// Player dyes
-		AllSkinDyeItem: "Non-Toxic Paint Roller"
-		EyeDyeItem: "Colored Contacts"
-		PantsDyeItem: "Pants-Dye Kit"
-		ScleraDyeItem: "Colored Eyedrops"
-		ShirtDyeItem: "Tie-Dye Kit"
-		ShoesDyeItem: "Colored Shoe Polish"
-		UndershirtDyeItem: "Lesser Tie-Dye Kit"
-		
-		// Blinking modifiers
-		AlwaysClosedContacts: "Adhesive Contacts"
-		AlwaysOpenContacts: "Ludovico Contacts"
-		NeverClosedContacts: "Ludovico Lite"
-		NeverOpenContacts: "Misshapen Contacts"
-		
-		// Accessories
-		BasicArmband: "Armband"
-	}
-	
-	ItemTooltip:
-	{
-		// Player dyes
-		AllSkinDyeItem:
-			'''
-			'100% safe, guaranteed!*'
-			Can dye your skin
-			'''
-		EyeDyeItem:
-			'''
-			'Made with the finest glass around!'
-			Can dye your eyes
-			'''
-		PantsDyeItem:
-			'''
-			'First, pants the clothing, then submerge it in dye'
-			Can dye your pants
-			'''
-		ScleraDyeItem:
-			'''
-			'It'll only sting for a second'
-			Can dye the whites of your eyes
-			'''
-		ShirtDyeItem:
-			'''
-			'Incredibly messy'
-			Can dye your shirt
-			'''
-		ShoesDyeItem:
-			'''
-			'Spit-shine!'
-			Can dye your shoes
-			'''
-		UndershirtDyeItem:
-			'''
-			'Just as messy as the normal kind'
-			Can dye your undershirt
-			'''
-		
-		// Blinking modifiers
-		AlwaysClosedContacts:
-			'''
-			'See no evil... or anything else, for that matter'
-			Forces your eyes closed
-			'''
-		AlwaysOpenContacts: 
-			'''
-			'All the suffering with none of the setup!'
-			Forces your eyes open
-			'''
-		NeverClosedContacts: 
-			'''
-			'You can close your eyes a little, as a treat'
-			Forces your eyes to never be fully closed
-			'''
-		NeverOpenContacts: 
-			'''
-			'Hurt like hell, but at least you look cool!'
-			Forces your eyes to never be fully open
-			'''
+Mods: {
+	SnekVanity: {
+		ExtraTooltip.PaintsAsDyesItem: Can also be used as dye
+
+		Items: {
+			AllSkinDyeItem: {
+				DisplayName: Non-Toxic Paint Roller
+				Tooltip:
+					'''
+					'100% safe, guaranteed!*'
+					Can dye your skin
+					'''
+			}
+
+			AlwaysClosedContacts: {
+				DisplayName: Adhesive Contacts
+				Tooltip:
+					'''
+					'See no evil... or anything else, for that matter'
+					Forces your eyes closed
+					'''
+			}
+
+			AlwaysOpenContacts: {
+				DisplayName: Ludovico Contacts
+				Tooltip:
+					'''
+					'All the suffering with none of the setup!'
+					Forces your eyes open
+					'''
+			}
+
+			BasicArmband: {
+				DisplayName: Armband
+				Tooltip: ""
+			}
+
+			EyeDyeItem: {
+				DisplayName: Colored Contacts
+				Tooltip:
+					'''
+					'Made with the finest glass around!'
+					Can dye your eyes
+					'''
+			}
+
+			NeverClosedContacts: {
+				DisplayName: Ludovico Lite
+				Tooltip:
+					'''
+					'You can close your eyes a little, as a treat'
+					Forces your eyes to never be fully closed
+					'''
+			}
+
+			NeverOpenContacts: {
+				DisplayName: Misshapen Contacts
+				Tooltip:
+					'''
+					'Hurt like hell, but at least you look cool!'
+					Forces your eyes to never be fully open
+					'''
+			}
+
+			PantsDyeItem: {
+				DisplayName: Pants-Dye Kit
+				Tooltip:
+					'''
+					'First, pants the clothing, then submerge it in dye'
+					Can dye your pants
+					'''
+			}
+
+			ScleraDyeItem: {
+				DisplayName: Colored Eyedrops
+				Tooltip:
+					'''
+					'It'll only sting for a second'
+					Can dye the whites of your eyes
+					'''
+			}
+
+			ShirtDyeItem: {
+				DisplayName: Tie-Dye Kit
+				Tooltip:
+					'''
+					'Incredibly messy'
+					Can dye your shirt
+					'''
+			}
+
+			ShoesDyeItem: {
+				DisplayName: Colored Shoe Polish
+				Tooltip:
+					'''
+					'Spit-shine!'
+					Can dye your shoes
+					'''
+			}
+
+			UndershirtDyeItem: {
+				DisplayName: Lesser Tie-Dye Kit
+				Tooltip:
+					'''
+					'Just as messy as the normal kind'
+					Can dye your undershirt
+					'''
+			}
+		}
 	}
 }

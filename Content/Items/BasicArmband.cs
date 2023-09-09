@@ -10,11 +10,6 @@ public sealed class BasicArmband : ModItem, IAmAsymmetricGlove, IAmSoldByVanilla
 {
 	int IAmSoldByVanillaNPC.NPC => NPCID.Clothier;
 
-	public override void SetStaticDefaults()
-	{
-		SacrificeTotal = 1;
-	}
-
 	public override void SetDefaults()
 	{
 		Item.accessory = true;

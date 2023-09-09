@@ -39,18 +39,22 @@ public sealed class VanillaShopNPC : GlobalNPC
 		}
 	}
 
-	public override void SetupShop(int type, Chest shop, ref int nextSlot)
+	public override void ModifyShop(NPCShop shop)
 	{
-		if (!_soldItemsById.TryGetValue(type, out List<(IAmSoldByVanillaNPC, int)> soldItems))
+		if (!_soldItemsById.TryGetValue(shop.NpcType, out List<(IAmSoldByVanillaNPC, int)> soldItems))
 		{
 			return;
 		}
 
-		foreach ((IAmSoldByVanillaNPC condition, int type) item in soldItems)
+		foreach ((IAmSoldByVanillaNPC condition, int type) in soldItems)
 		{
-			if (item.condition.Available)
+			if (condition.Available != null)
 			{
-				shop.item[nextSlot++].SetDefaults(item.type);
+				shop.Add(type, condition.Available);
+			}
+			else
+			{
+				shop.Add(type);
 			}
 		}
 	}

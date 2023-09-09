@@ -5,8 +5,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using On_Player = On.Terraria.Player;
-using On_PlayerDrawLayers = On.Terraria.DataStructures.PlayerDrawLayers;
 
 namespace SnekVanity.Common.Players;
 

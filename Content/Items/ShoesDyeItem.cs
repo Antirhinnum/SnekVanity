@@ -12,15 +12,9 @@ public sealed class ShoesDyeItem : ModItem, IDyeShoes, IAmSoldByVanillaNPC
 
 	int IAmSoldByVanillaNPC.NPC => NPCID.DyeTrader;
 
-	public override void SetStaticDefaults()
-	{
-		SacrificeTotal = 1;
-	}
-
 	public override void SetDefaults()
 	{
 		Item.accessory = true;
-		Item.canBePlacedInVanityRegardlessOfConditions = true;
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
 		Item.color = Color.Purple;

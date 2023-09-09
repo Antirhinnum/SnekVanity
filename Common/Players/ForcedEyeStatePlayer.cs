@@ -4,8 +4,6 @@ using System.Reflection;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
-using On_Player = On.Terraria.Player;
-using On_PlayerEyeHelper = On.Terraria.GameContent.PlayerEyeHelper;
 
 namespace SnekVanity.Common.Players;
 

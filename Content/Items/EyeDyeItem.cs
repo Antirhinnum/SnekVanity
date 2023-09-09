@@ -12,15 +12,9 @@ public sealed class EyeDyeItem : ModItem, IDyeEyes, IAmAsymmetricSpecial, IAmSol
 
 	int IAmSoldByVanillaNPC.NPC => NPCID.DyeTrader;
 
-	public override void SetStaticDefaults()
-	{
-		SacrificeTotal = 1;
-	}
-
 	public override void SetDefaults()
 	{
 		Item.accessory = true;
-		Item.canBePlacedInVanityRegardlessOfConditions = true;
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
 		Item.color = Color.Gray;
