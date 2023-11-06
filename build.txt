@@ -1,6 +1,6 @@
 displayName = Snek's Misc. Vanity
 author = Snek
-version = 1.1.0
+version = 1.1.1
 hideCode = false
 hideResources = false
 includeSource = true

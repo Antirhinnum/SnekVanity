@@ -10,7 +10,7 @@ namespace SnekVanity.Content.DrawLayers;
 
 public sealed class HideBodyPartsLayer : PlayerDrawLayer
 {
-	private static readonly int[] _frontArmPlayerTextureIds = { PlayerTextureID.ArmUndershirt, PlayerTextureID.ArmShirt, PlayerTextureID.Hands, PlayerTextureID.ArmSkin };
+	private static readonly int[] _frontArmPlayerTextureIds = { PlayerTextureID.ArmUndershirt, PlayerTextureID.ArmShirt, PlayerTextureID.Hands, PlayerTextureID.ArmSkin, PlayerTextureID.ArmHand };
 
 	public override Position GetDefaultPosition()
 	{

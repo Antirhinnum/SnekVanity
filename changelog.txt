@@ -1,2 +1,1 @@
-[list][*]Added the Armless Harness and the DIY Hair Dye.
-[*]Updated the sprite for the Basic Armband.[/list]
+[list][*]Fixed the Armless Harness not hiding hands for body equips that tried to hide arms.[/list]
