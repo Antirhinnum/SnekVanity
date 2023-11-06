@@ -44,6 +44,15 @@ Mods: {
 					'''
 			}
 
+			HideArmsItem: {
+				DisplayName: Armless Harness
+				Tooltip:
+					'''
+					'For when amputation is a wee bit excessive'
+					Hides your arms
+					'''
+			}
+
 			NeverClosedContacts: {
 				DisplayName: Ludovico Lite
 				Tooltip:
@@ -104,6 +113,15 @@ Mods: {
 					'''
 					'Just as messy as the normal kind'
 					Can dye your undershirt
+					'''
+			}
+
+			CustomHairDyeItem: {
+				DisplayName: DIY Hair Dye
+				Tooltip:
+					'''
+					'Try not to stain the sink!'
+					Can dye your hair, even when not wearing the {$ItemName.FamiliarWig}
 					'''
 			}
 		}

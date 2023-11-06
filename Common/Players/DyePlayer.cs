@@ -2,7 +2,6 @@
 using SnekVanity.Core;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -70,6 +69,11 @@ public sealed class DyePlayer : ModPlayer
 	/// </summary>
 	public int cEyeBlink;
 
+	/// <summary>
+	/// The shader index applied to this player's hair.
+	/// </summary>
+	public int cHairCustom;
+
 	public override void Load()
 	{
 		On_Player.UpdateDyes += ResetCustomDyes;
@@ -102,6 +106,7 @@ public sealed class DyePlayer : ModPlayer
 			dPlayer.cPants = 0;
 			dPlayer.cShoes = 0;
 			dPlayer.cEyeBlink = 0;
+			dPlayer.cHairCustom = 0;
 		}
 
 		orig(self);
@@ -185,6 +190,19 @@ public sealed class DyePlayer : ModPlayer
 		{
 			dPlayer.cEyeBlink = dye;
 		}
+
+		if (modItem is IDyeHair)
+		{
+			dPlayer.cHairCustom = dye;
+		}
+	}
+
+	public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+	{
+		if (cHairCustom != 0)
+		{
+			drawInfo.hairDyePacked = PlayerDrawHelper.PackShader(cHairCustom, PlayerDrawHelper.ShaderConfiguration.ArmorShader);
+		}
 	}
 
 	/// <summary>
@@ -201,9 +219,6 @@ public sealed class DyePlayer : ModPlayer
 			return;
 		}
 
-		// Since assets are stored in one place, any body assets that show up in DrawDataCache will be references in TextureAssets.
-		static bool IsCorrectTexture(DrawData data, Player player, int playerTextureID) => data.texture == TextureAssets.Players[player.skinVariant, playerTextureID].Value;
-
 		for (int i = 0; i < drawinfo.DrawDataCache.Count; i++)
 		{
 			DrawData data = drawinfo.DrawDataCache[i];
@@ -211,7 +226,7 @@ public sealed class DyePlayer : ModPlayer
 			for (int j = 0; j < PlayerTextureID.Count; j++)
 			{
 				int shader = dPlayer.DyeForPlayerTextureID(j);
-				if (IsCorrectTexture(data, player, j) && shader > 0)
+				if (PlayerDrawHelpers.UsesPlayerTexture(data, player, j) && shader > 0)
 				{
 					data.shader = shader;
 					drawinfo.DrawDataCache[i] = data;

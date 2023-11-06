@@ -3,9 +3,14 @@ Has support for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2878
 
 Content Summary:
 [list][*]A set of items that allow the player to dye each part of their base player, including their skin, eyes, eye whites, and default clothing.
+[*]A hair dye that takes on the effects of any dye used on it.
 [*]A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
+[*]A harness that allows you to hide your arms.
 [*]A generic bracelet.[/list]
 
 All items in the mod can be purchased from various NPCs -- see the Discussions tab for specifics.
+
+Credits:[list]
+[*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness.[/list]
 
 [url=https://github.com/Antirhinnum/SnekVanity]Source on GitHub[/url]

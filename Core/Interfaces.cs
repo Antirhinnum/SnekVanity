@@ -106,6 +106,12 @@ public interface IDyeShoes
 public interface IDyeEyeBlink
 { }
 
+/// <summary>
+/// Any <see cref="ModItem"/> that implements this interface will change the player's hair color when dyed.
+/// </summary>
+public interface IDyeHair
+{ }
+
 #endregion Player Dyes
 
 /// <summary>
@@ -121,6 +127,16 @@ public interface IForceEyeState
 	/// <returns>The new eye state of the player.</returns>
 	EyeFrame SetEyeState(Player player, EyeFrame oldFrame);
 }
+
+#region Hidden Body Parts
+
+/// <summary>
+/// Any <see cref="ModItem"/> that implements this interface will hide the player's arms when equipped.
+/// </summary>
+public interface IHideArms
+{ }
+
+#endregion Hidden Body Parts
 
 /// <summary>
 /// Any <see cref="ModItem"/> that implements this interface will be automatically added to the given NPC's shop.

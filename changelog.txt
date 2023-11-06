@@ -1,3 +1,2 @@
-[list][*][i]Actually[/i] fixed the bug where modded accessory slot handling would sometimes break the character select menu.
-[*]Added a Mod.Call method.
-[*]Ported to 1.4.4.[/list]
+[list][*]Added the Armless Harness and the DIY Hair Dye.
+[*]Updated the sprite for the Basic Armband.[/list]
