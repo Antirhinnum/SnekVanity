@@ -99,7 +99,7 @@ public sealed class BodyPartDyePlayer : ModPlayer, IAddDyeSlots
 
 	public void UpdateDyeSlots(Item armorItem, Item dyeItem)
 	{
-		if (armorItem.ModItem is not ModItem modItem || !CrossModSystem.AsymmetricEquips_ItemOnFrontSide(armorItem, Player))
+		if (armorItem.ModItem is not ModItem modItem || !CrossModSystem.AsymmetricEquips_ItemOnDefaultSide(armorItem, Player))
 		{
 			return;
 		}

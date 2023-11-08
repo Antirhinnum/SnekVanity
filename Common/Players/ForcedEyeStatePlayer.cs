@@ -33,7 +33,7 @@ public sealed class ForcedEyeStatePlayer : ModPlayer
 	{
 		orig(self, itemSlot, item, modded);
 
-		if (!CrossModSystem.AsymmetricEquips_ItemOnFrontSide(item, self))
+		if (!CrossModSystem.AsymmetricEquips_ItemOnDefaultSide(item, self))
 		{
 			return;
 		}

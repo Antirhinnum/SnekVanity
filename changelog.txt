@@ -1,1 +1,1 @@
-[list][*]Fixed the Armless Harness not hiding hands for body equips that tried to hide arms.[/list]
+[list][*]Added Shoulder Birds. Catch a Macaw, Cockatiel, or Toucan, and equip it![/list]

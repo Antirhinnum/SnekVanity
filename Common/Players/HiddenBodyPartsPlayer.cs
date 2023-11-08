@@ -32,9 +32,9 @@ public sealed class HiddenBodyPartsPlayer : ModPlayer
 		// onCorrectSide == front arm hidden
 		// !onCorrectSide == back arm hidden
 		// both == not asymmetric, both arms hidden
-		bool onCorrectSide = CrossModSystem.AsymmetricEquips_ItemOnFrontSide(item, self);
+		bool onCorrectSide = CrossModSystem.AsymmetricEquips_ItemOnDefaultSide(item, self);
 		self.direction = -self.direction;
-		bool onWrongSide = CrossModSystem.AsymmetricEquips_ItemOnFrontSide(item, self);
+		bool onWrongSide = CrossModSystem.AsymmetricEquips_ItemOnDefaultSide(item, self);
 		self.direction = -self.direction;
 
 		if (item.ModItem is IHideArms)

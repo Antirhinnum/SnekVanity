@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using SnekVanity.Common.Systems;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,7 +17,9 @@ public interface IAmAsymmetricGlove
 /// Any <see cref="ModItem"/> that implements this interface will use manual asymmetry when the mod "Asymmetric Equips" is enabled.
 /// </summary>
 public interface IAmAsymmetricSpecial
-{ }
+{
+	int AsymmetricDefaultSide => CrossModSystem.RIGHT_SIDE;
+}
 
 #endregion Asymmetric Equips Support
 
