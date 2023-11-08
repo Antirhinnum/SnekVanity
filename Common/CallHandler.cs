@@ -11,7 +11,7 @@ public static class CallHandler
 		{
 			case ["PlayerBodyDye", Player player, int slot]:
 			{
-				return player.GetModPlayer<DyePlayer>().DyeForPlayerTextureID(slot);
+				return player.GetModPlayer<BodyPartDyePlayer>().DyeForPlayerTextureID(slot);
 			}
 		}
 

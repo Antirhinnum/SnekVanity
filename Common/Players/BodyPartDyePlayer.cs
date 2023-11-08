@@ -1,4 +1,5 @@
-﻿using SnekVanity.Common.Systems;
+﻿using SnekVanity.Common.Hooks;
+using SnekVanity.Common.Systems;
 using SnekVanity.Core;
 using Terraria;
 using Terraria.DataStructures;
@@ -7,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace SnekVanity.Common.Players;
 
-public sealed class DyePlayer : ModPlayer
+public sealed class BodyPartDyePlayer : ModPlayer, IAddDyeSlots
 {
 	/// <summary>
 	/// The shader index applied to this player's head.
@@ -76,55 +77,29 @@ public sealed class DyePlayer : ModPlayer
 
 	public override void Load()
 	{
-		On_Player.UpdateDyes += ResetCustomDyes;
-		On_Player.UpdateItemDye += UpdatePlayerDye;
 		On_PlayerDrawLayers.DrawPlayer_TransformDrawData += ModifyPlayerDyes;
 	}
 
-	public override void Unload()
+	public void ClearDyeSlots()
 	{
-		On_Player.UpdateDyes -= ResetCustomDyes;
-		On_PlayerDrawLayers.DrawPlayer_TransformDrawData -= ModifyPlayerDyes;
+		cHeadSkin = 0;
+		cEyeWhites = 0;
+		cEye = 0;
+		cTorsoSkin = 0;
+		cUndershirt = 0;
+		cHandSkin = 0;
+		cShirt = 0;
+		cArmSkin = 0;
+		cLegSkin = 0;
+		cPants = 0;
+		cShoes = 0;
+		cEyeBlink = 0;
+		cHairCustom = 0;
 	}
 
-	/// <summary>
-	/// Reset the player's dyes alongside vanilla.
-	/// </summary>
-	private static void ResetCustomDyes(On_Player.orig_UpdateDyes orig, Player self)
+	public void UpdateDyeSlots(Item armorItem, Item dyeItem)
 	{
-		if (self.TryGetModPlayer(out DyePlayer dPlayer))
-		{
-			dPlayer.cHeadSkin = 0;
-			dPlayer.cEyeWhites = 0;
-			dPlayer.cEye = 0;
-			dPlayer.cTorsoSkin = 0;
-			dPlayer.cUndershirt = 0;
-			dPlayer.cHandSkin = 0;
-			dPlayer.cShirt = 0;
-			dPlayer.cArmSkin = 0;
-			dPlayer.cLegSkin = 0;
-			dPlayer.cPants = 0;
-			dPlayer.cShoes = 0;
-			dPlayer.cEyeBlink = 0;
-			dPlayer.cHairCustom = 0;
-		}
-
-		orig(self);
-	}
-
-	/// <summary>
-	/// Updates the player's body dyes from the given item.
-	/// </summary>
-	private void UpdatePlayerDye(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
-	{
-		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
-
-		if ((isSetToHidden && isNotInVanitySlot) || !self.TryGetModPlayer(out DyePlayer dPlayer) || armorItem.ModItem is not ModItem modItem)
-		{
-			return;
-		}
-
-		if (!CrossModSystem.AsymmetricEquips_ItemOnFrontSide(armorItem, self))
+		if (armorItem.ModItem is not ModItem modItem || !CrossModSystem.AsymmetricEquips_ItemOnFrontSide(armorItem, Player))
 		{
 			return;
 		}
@@ -133,67 +108,67 @@ public sealed class DyePlayer : ModPlayer
 
 		if (modItem is IDyeHeadSkin)
 		{
-			dPlayer.cHeadSkin = dye;
+			cHeadSkin = dye;
 		}
 
 		if (modItem is IDyeEyeWhites)
 		{
-			dPlayer.cEyeWhites = dye;
+			cEyeWhites = dye;
 		}
 
 		if (modItem is IDyeEyes)
 		{
-			dPlayer.cEye = dye;
+			cEye = dye;
 		}
 
 		if (modItem is IDyeTorsoSkin)
 		{
-			dPlayer.cTorsoSkin = dye;
+			cTorsoSkin = dye;
 		}
 
 		if (modItem is IDyeUndershirt)
 		{
-			dPlayer.cUndershirt = dye;
+			cUndershirt = dye;
 		}
 
 		if (modItem is IDyeHandSkin)
 		{
-			dPlayer.cHandSkin = dye;
+			cHandSkin = dye;
 		}
 
 		if (modItem is IDyeShirt)
 		{
-			dPlayer.cShirt = dye;
+			cShirt = dye;
 		}
 
 		if (modItem is IDyeArmSkin)
 		{
-			dPlayer.cArmSkin = dye;
+			cArmSkin = dye;
 		}
 
 		if (modItem is IDyeLegSkin)
 		{
-			dPlayer.cLegSkin = dye;
+			cLegSkin = dye;
 		}
 
 		if (modItem is IDyePants)
 		{
-			dPlayer.cPants = dye;
+			cPants = dye;
 		}
 
 		if (modItem is IDyeShoes)
 		{
-			dPlayer.cShoes = dye;
+			cShoes = dye;
 		}
 
 		if (modItem is IDyeEyeBlink)
 		{
-			dPlayer.cEyeBlink = dye;
+			cEyeBlink = dye;
 		}
 
 		if (modItem is IDyeHair)
 		{
-			dPlayer.cHairCustom = dye;
+			cHairCustom = dye;
 		}
 	}
 
@@ -207,6 +182,7 @@ public sealed class DyePlayer : ModPlayer
 
 	/// <summary>
 	/// Applies the player's body dyes to their DrawData right before the player is drawn.
+	/// <br/> Exists because most of the player's body parts are drawn without providing a shader index that we could overwrite (like with hair).
 	/// </summary>
 	private static void ModifyPlayerDyes(On_PlayerDrawLayers.orig_DrawPlayer_TransformDrawData orig, ref PlayerDrawSet drawinfo)
 	{
@@ -214,7 +190,7 @@ public sealed class DyePlayer : ModPlayer
 
 		// Change the shader of each layer we'd like to dye.
 		Player player = drawinfo.drawPlayer;
-		if (!player.TryGetModPlayer(out DyePlayer dPlayer))
+		if (!player.TryGetModPlayer(out BodyPartDyePlayer bodyDyePlayer))
 		{
 			return;
 		}
@@ -225,7 +201,7 @@ public sealed class DyePlayer : ModPlayer
 
 			for (int j = 0; j < PlayerTextureID.Count; j++)
 			{
-				int shader = dPlayer.DyeForPlayerTextureID(j);
+				int shader = bodyDyePlayer.DyeForPlayerTextureID(j);
 				if (PlayerDrawHelpers.UsesPlayerTexture(data, player, j) && shader > 0)
 				{
 					data.shader = shader;

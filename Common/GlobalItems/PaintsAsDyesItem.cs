@@ -19,6 +19,7 @@ public sealed class PaintsAsDyesItem : GlobalItem
 	public override void SetDefaults(Item item)
 	{
 		item.dye = PlayerDrawHelper.PackShader(item.paint, PlayerDrawHelper.ShaderConfiguration.TilePaintID);
+		item.StatsModifiedBy.Add(Mod);
 	}
 
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
