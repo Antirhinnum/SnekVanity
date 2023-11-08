@@ -1,1 +1,1 @@
-[list][*]Added Shoulder Birds. Catch a Macaw, Cockatiel, or Toucan, and equip it![/list]
+[list][*]Added missing details to description.[/list]

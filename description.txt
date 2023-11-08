@@ -7,8 +7,10 @@ Content Summary:
 * A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
 * A harness that allows you to hide your arms.
 * A generic bracelet.
+* You can now use paints as dyes.
+* You can now wear some birds on your shoulders.
 
 All items in the mod can be purchased from various NPCs -- see the Workshop page for specifics.
 
 Credits:
-- The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness.
+- The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness and Shoulder Birds.
