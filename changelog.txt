@@ -1,1 +1,2 @@
-[list][*]Added missing details to description.[/list]
+[list][*]Fixed issue where the Armless Harness could hide held projectiles when wearing certain armor sets.
+[*]Added missing idea credit.[/list]

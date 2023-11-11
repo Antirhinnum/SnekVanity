@@ -13,6 +13,7 @@ Content Summary:
 All items in the mod can be purchased from various NPCs -- see the Discussions tab for specifics.
 
 Credits:[list]
-[*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness and Shoulder Birds[/list]
+[*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness and Shoulder Birds.
+[*]Voyd: Idea for the DIY Hair Dye.[/list]
 
 [url=https://github.com/Antirhinnum/SnekVanity]Source on GitHub[/url]

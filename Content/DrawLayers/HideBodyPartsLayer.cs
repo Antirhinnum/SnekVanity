@@ -31,20 +31,19 @@ public sealed class HideBodyPartsLayer : PlayerDrawLayer
 		{
 			DrawData data = drawInfo.DrawDataCache[i];
 			bool playerSkinData = _frontArmPlayerTextureIds.Any(i => PlayerDrawHelpers.UsesPlayerTexture(data, drawPlayer, i));
-			bool bodyData = drawPlayer.body > -1 && (data.texture == TextureAssets.ArmorBody[drawPlayer.body].Value || data.texture == TextureAssets.ArmorBodyComposite[drawPlayer.body].Value || data.texture == TextureAssets.FemaleBody[drawPlayer.body].Value);
+			bool isBodyTexture = drawPlayer.body > -1 && (data.texture == TextureAssets.ArmorBody[drawPlayer.body].Value || data.texture == TextureAssets.ArmorBodyComposite[drawPlayer.body].Value || data.texture == TextureAssets.FemaleBody[drawPlayer.body].Value);
+			bool isFrontArmFrame = hiddenPlayer.hideFrontArm && data.sourceRect == drawInfo.compFrontArmFrame;
+			bool isBackArmFrame = hiddenPlayer.hideBackArm && data.sourceRect == drawInfo.compBackArmFrame;
 
-			if (playerSkinData || bodyData)
+			if ((playerSkinData || isBodyTexture) && (isFrontArmFrame || isBackArmFrame))
 			{
-				if (hiddenPlayer.hideFrontArm && data.sourceRect == drawInfo.compFrontArmFrame)
+				if (drawInfo.projectileDrawPosition > i)
 				{
-					drawInfo.DrawDataCache.RemoveAt(i);
-					i--;
+					drawInfo.projectileDrawPosition--;
 				}
-				else if (hiddenPlayer.hideBackArm && data.sourceRect == drawInfo.compBackArmFrame)
-				{
-					drawInfo.DrawDataCache.RemoveAt(i);
-					i--;
-				}
+
+				drawInfo.DrawDataCache.RemoveAt(i);
+				i--;
 			}
 		}
 	}
