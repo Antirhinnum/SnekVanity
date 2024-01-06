@@ -1,6 +1,10 @@
 Mods: {
 	SnekVanity: {
-		ExtraTooltip.PaintsAsDyesItem: Can also be used as dye
+		ExtraTooltip: {
+			CanAlsoUseAsDye: Can also be used as dye
+			PaintsAsDyesItem: "{$CanAlsoUseAsDye}"
+			HairDyesAsDyesItem: "{$CanAlsoUseAsDye}"
+		}
 
 		Items: {
 			AllSkinDyeItem: {

@@ -1,2 +1,2 @@
-[list][*]Fixed issue where the Armless Harness could hide held projectiles when wearing certain armor sets.
-[*]Added missing idea credit.[/list]
+[list][*]Hair Dyes can now be used as armor dyes.
+[*]Fixed paints being sorted as dyes in the Research menu.[/list]

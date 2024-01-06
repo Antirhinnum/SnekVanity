@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -25,5 +26,11 @@ public sealed class PaintsAsDyesItem : GlobalItem
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
 	{
 		tooltips.Add(new TooltipLine(Mod, $"{nameof(SnekVanity)}:{nameof(PaintsAsDyesItem)}", Language.GetTextValue($"Mods.{nameof(SnekVanity)}.ExtraTooltip.{nameof(PaintsAsDyesItem)}")));
+	}
+
+	public override void ModifyResearchSorting(Item item, ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
+	{
+		// Because Item::dye is set, paints get categorized as dyes. Fix that.
+		itemGroup = ContentSamples.CreativeHelper.ItemGroup.Paint;
 	}
 }
