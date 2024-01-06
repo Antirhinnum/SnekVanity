@@ -1,4 +1,5 @@
-﻿using SnekVanity.Common.Hooks;
+﻿using ReLogic.Peripherals.RGB;
+using SnekVanity.Common.Hooks;
 using SnekVanity.Common.Systems;
 using System.Collections.Generic;
 using Terraria;
@@ -39,8 +40,8 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots
 
 	public void ClearDyeSlots()
 	{
-		cBird = 0;
-		cBirdFront = 0;
+		cBird = -1;
+		cBirdFront = -1;
 	}
 
 	public void UpdateDyeSlots(Item armorItem, Item dyeItem)
@@ -59,11 +60,11 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots
 
 		if (notAsymmetric)
 		{
-			if (birdFrontNpcId == -1)
+			if (birdFrontNpcId != -1 && cBirdFront == -1)
 			{
 				cBirdFront = dye;
 			}
-			else
+			else if (birdNpcId != -1)
 			{
 				cBird = dye;
 			}

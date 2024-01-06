@@ -48,7 +48,7 @@ public sealed class HooksPlayer : ModPlayer
 	{
 		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
 
-		if ((isSetToHidden && isNotInVanitySlot) || dyeItem.dye == 0)
+		if (isSetToHidden && isNotInVanitySlot)
 		{
 			return;
 		}
