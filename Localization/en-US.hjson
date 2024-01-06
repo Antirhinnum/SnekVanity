@@ -128,6 +128,20 @@ Mods: {
 					Can dye your hair, even when not wearing the {$ItemName.FamiliarWig}
 					'''
 			}
+
+			CombinedDyeItem: {
+				DisplayName: Mysterious Dye Bottle
+				Tooltip:
+					'''
+					'Witchcraft is afoot...'
+					<right> this item with a dye in hand to add it
+					<right> this item with an empty hand to take a dye out
+					Up to two dyes can be added
+					'''
+				MixingNone: Mixing: No dyes...
+				MixingOne: Mixing: {0}
+				MixingTwo: Mixing: {0} and {1}
+			}
 		}
 	}
 }

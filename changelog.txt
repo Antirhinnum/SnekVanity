@@ -1,2 +1,3 @@
-[list][*]Hair Dyes can now be used as armor dyes.
+[list][*]Added the Mysterious Dye Bottle, which allows blending any two dyes of your choosing.
+[*]Hair Dyes can now be used as armor dyes.
 [*]Fixed paints being sorted as dyes in the Research menu.[/list]

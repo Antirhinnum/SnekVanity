@@ -7,6 +7,7 @@ Content Summary:
 [*]A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
 [*]A harness that allows you to hide your arms.
 [*]A generic bracelet.
+[*]A dye that combines any two dyes you want it to.
 [*]You can now use paints and hair dyes as normal dyes.
 [*]You can now wear some birds on your shoulders.[/list]
 
