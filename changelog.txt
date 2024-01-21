@@ -1,3 +1,4 @@
-[list][*]Fixed equipped birds sometimes not showing up until the NPC version of them was seen in the world.
+[list][*]Added the Forbidden Sigil.
+[*]Fixed equipped birds sometimes not showing up until the NPC version of them was seen in the world.
 [*]Fixed the Armless Harness crashing the game when modded body equips were used.
 [*]Clarified the Mysterious Dye Bottle's tooltip.[/list]

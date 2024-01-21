@@ -143,6 +143,15 @@ Mods: {
 				MixingOne: Mixing: {0}
 				MixingTwo: Mixing: {0} and {1}
 			}
+
+			ForbiddenArmorSigilItem: {
+				DisplayName: Forbidden Sigil
+				Tooltip:
+					'''
+					'Very forbidden'
+					If you already have a sigil, dyeing this item dyes the sigil
+					'''
+			}
 		}
 	}
 }

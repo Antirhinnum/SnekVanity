@@ -8,6 +8,7 @@ Content Summary:
 * A harness that allows you to hide your arms.
 * A generic bracelet.
 * A dye that combines any two dyes you want it to.
+* A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 * You can now use paints and hair dyes as normal dyes.
 * You can now wear some birds on your shoulders.
 
