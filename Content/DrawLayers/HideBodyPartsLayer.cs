@@ -1,4 +1,6 @@
-﻿using SnekVanity.Common.Players;
+﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using SnekVanity.Common.Players;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
@@ -29,9 +31,11 @@ public sealed class HideBodyPartsLayer : PlayerDrawLayer
 
 		for (int i = 0; i < drawInfo.DrawDataCache.Count; i++)
 		{
+			static bool AreTexturesSame(Asset<Texture2D>[] array, Texture2D toCompare, int index) => array != null && array.IndexInRange(index) && array[index] != null && array[index].Value == toCompare;
+
 			DrawData data = drawInfo.DrawDataCache[i];
 			bool playerSkinData = _frontArmPlayerTextureIds.Any(i => PlayerDrawHelpers.UsesPlayerTexture(data, drawPlayer, i));
-			bool isBodyTexture = drawPlayer.body > -1 && (data.texture == TextureAssets.ArmorBody[drawPlayer.body].Value || data.texture == TextureAssets.ArmorBodyComposite[drawPlayer.body].Value || data.texture == TextureAssets.FemaleBody[drawPlayer.body].Value);
+			bool isBodyTexture = drawPlayer.body > -1 && (AreTexturesSame(TextureAssets.ArmorBodyComposite, data.texture, drawPlayer.body) || AreTexturesSame(TextureAssets.ArmorBody, data.texture, drawPlayer.body) || AreTexturesSame(TextureAssets.FemaleBody, data.texture, drawPlayer.body));
 			bool isFrontArmFrame = hiddenPlayer.hideFrontArm && data.sourceRect == drawInfo.compFrontArmFrame;
 			bool isBackArmFrame = hiddenPlayer.hideBackArm && data.sourceRect == drawInfo.compBackArmFrame;
 
