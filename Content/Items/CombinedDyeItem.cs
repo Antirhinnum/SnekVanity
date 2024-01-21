@@ -310,7 +310,6 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 	public override void ModifyTooltips(List<TooltipLine> tooltips)
 	{
-		// TODO: List dyes
 		int lastTooltipIndex = tooltips.FindLastIndex(t => t.Mod == "Terraria" && t.Name.StartsWith("Tooltip"));
 		if (lastTooltipIndex != -1)
 		{
