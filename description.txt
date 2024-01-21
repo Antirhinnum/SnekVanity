@@ -1,5 +1,5 @@
 A collection of miscellaneous vanity items, focused on either unique effects or tiny accessories.
-Has support for Asymmetric Equips.
+Has support for Asymmetric Equipment.
 
 Content Summary:
 * A set of items that allow the player to dye each part of their base player, including their skin, eyes, eye whites, and default clothing.

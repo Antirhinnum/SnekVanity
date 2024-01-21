@@ -1,5 +1,5 @@
 A collection of miscellaneous vanity items, focused on either unique effects or tiny accessories.
-Has support for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2878558240]Asymmetric Equips[/url].
+Has support for [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2878558240]Asymmetric Equipment[/url].
 
 Content Summary:
 [list][*]A set of items that allow the player to dye each part of their base player, including their skin, eyes, eye whites, and default clothing.
@@ -8,6 +8,7 @@ Content Summary:
 [*]A harness that allows you to hide your arms.
 [*]A generic bracelet.
 [*]A dye that combines any two dyes you want it to.
+[*]A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 [*]You can now use paints and hair dyes as normal dyes.
 [*]You can now wear some birds on your shoulders.[/list]
 
