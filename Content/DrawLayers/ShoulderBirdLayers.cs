@@ -4,6 +4,7 @@ using SnekVanity.Common.Players;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace SnekVanity.Content.DrawLayers;
@@ -24,6 +25,11 @@ public abstract class ShoulderBirdLayer : PlayerDrawLayer
 
 		if (bird != -1)
 		{
+			if (bird < NPCID.Count)
+			{
+				Main.instance.LoadNPC(bird); // Load the bird texture if it isn't loaded yet. Fixes an issue where birds wouldn't show up when you first entered a world.
+			}
+
 			Texture2D birdTexture = TextureAssets.Npc[bird].Value;
 			Rectangle frame = birdTexture.Frame(verticalFrames: Main.npcFrameCount[bird]);
 			Vector2 position = drawInfo.Position + drawInfo.drawPlayer.bodyPosition + drawInfo.bodyVect + offset;
