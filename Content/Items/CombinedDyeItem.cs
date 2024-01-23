@@ -76,6 +76,13 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 			for (int i = 0; i < drawinfo.DrawDataCache.Count; i++)
 			{
 				DrawData data = drawinfo.DrawDataCache[i];
+				if (data.shader == CombinedDyeShaderIndex)
+				{
+					data.shader = 0;
+					drawinfo.DrawDataCache[i] = data;
+					continue;
+				}
+
 				if (data.shader == 0 || !TryUnpackDyeValues(data.shader, out int first, out int second))
 				{
 					continue;
@@ -254,7 +261,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	{
 		if (!Main.dedServ)
 		{
-			GameShaders.Armor.BindShader(Type, new ArmorShaderData(null, null));
+			GameShaders.Armor.BindShader(Type, new ArmorShaderData(Main.PixelShaderRef, "Default"));
 			CombinedDyeShaderIndex = GameShaders.Armor.GetShaderIdFromItemId(Type);
 		}
 	}
