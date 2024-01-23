@@ -1,2 +1,3 @@
-[list][*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
+[list][*]Fixed the Forbidden Sigil not selling for anything.
+[*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
 [*]Fixed a bug where the Mysterious Dye Bottle could lose stored information.[/list]

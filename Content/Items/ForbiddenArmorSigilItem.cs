@@ -86,6 +86,7 @@ public sealed class ForbiddenArmorSigilItem : ModItem
 		Item.DefaultToAccessory();
 		Item.vanity = true;
 		Item.hasVanityEffects = true;
+		Item.value = Item.sellPrice(gold: 2);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)
