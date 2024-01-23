@@ -16,66 +16,14 @@ namespace SnekVanity.Content.Items;
 
 public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 {
-	// Handles swapping the registered dye value to the packed packed dyes, as well as swapping textures with dyed versions.
-	public sealed class CombinedDyePlayer : ModPlayer
+	private static class Hooks
 	{
-		public override void Load()
-		{
-			On_Player.UpdateItemDye += ReplaceSpecialDyeInfo;
-			On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += ReplaceTextures;
-
-			On_Main.PrepareDrawnEntityDrawing += ReplaceUnknownShader;
-			On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float += ReplaceEntityTextures;
-			On_Main.EntitySpriteDraw_DrawData += ReplaceEntityTexturesDrawData;
-		}
-
-		public override void UpdateDyes()
-		{
-			static void ReplaceDyeIndex(ref int storedIndex, Item dyeItem)
-			{
-				if (storedIndex == CombinedDyeShaderIndex)
-				{
-					if (dyeItem.ModItem is CombinedDyeItem combinedDye)
-					{
-						storedIndex = combinedDye.GetDyeValue();
-					}
-					else
-					{
-						storedIndex = 0;
-					}
-				}
-			}
-
-			// Manually replace any dye values that use hardcoded items.
-			ReplaceDyeIndex(ref Player.cHead, Player.dye[0]);
-			ReplaceDyeIndex(ref Player.cBody, Player.dye[1]);
-			ReplaceDyeIndex(ref Player.cLegs, Player.wearsRobe ? Player.dye[1] : Player.dye[2]);
-			ReplaceDyeIndex(ref Player.cPet, Player.miscDyes[0]);
-			ReplaceDyeIndex(ref Player.cLight, Player.miscDyes[1]);
-			ReplaceDyeIndex(ref Player.cMinecart, Player.miscDyes[2]);
-			ReplaceDyeIndex(ref Player.cMount, Player.miscDyes[3]);
-			ReplaceDyeIndex(ref Player.cGrapple, Player.miscDyes[4]);
-		}
-
-		// Handles all accessories
-		private static void ReplaceSpecialDyeInfo(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
-		{
-			if (dyeItem.type != ModContent.ItemType<CombinedDyeItem>())
-			{
-				orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
-				return;
-			}
-
-			dyeItem.dye = (dyeItem.ModItem as CombinedDyeItem).GetDyeValue();
-			orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
-			dyeItem.dye = CombinedDyeShaderIndex;
-		}
-
-		private static void ReplaceTextures(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo)
+		public static void ReplaceTextures(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo)
 		{
 			for (int i = 0; i < drawinfo.DrawDataCache.Count; i++)
 			{
 				DrawData data = drawinfo.DrawDataCache[i];
+				// There's no way to get the Item this came from, so just clear it.
 				if (data.shader == CombinedDyeShaderIndex)
 				{
 					data.shader = 0;
@@ -101,17 +49,18 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 			orig(ref drawinfo);
 		}
 
-		private static void ReplaceUnknownShader(On_Main.orig_PrepareDrawnEntityDrawing orig, Main self, Entity entity, int intendedShader, Matrix? overrideMatrix)
+		public static void ReplaceUnknownShader(On_Main.orig_PrepareDrawnEntityDrawing orig, Main self, Entity entity, int intendedShader, Matrix? overrideMatrix)
 		{
+			// There's no way to get the Item instance this dye value came from, so just clear it.
 			if (intendedShader == CombinedDyeShaderIndex)
 			{
-				intendedShader = 0; // Can't do much unless we know which dye item is being used.
+				intendedShader = 0;
 			}
 
 			orig(self, entity, intendedShader, overrideMatrix);
 		}
 
-		private static void ReplaceEntityTextures(On_Main.orig_EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float orig, Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float worthless)
+		public static void ReplaceEntityTextures(On_Main.orig_EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float orig, Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float worthless)
 		{
 			int originalShader = Main.CurrentDrawnEntityShader;
 			if (TryUnpackDyeValues(Main.CurrentDrawnEntityShader, out int first, out int second))
@@ -138,7 +87,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 			Main.CurrentDrawnEntityShader = originalShader;
 		}
 
-		private static void ReplaceEntityTexturesDrawData(On_Main.orig_EntitySpriteDraw_DrawData orig, DrawData data)
+		public static void ReplaceEntityTexturesDrawData(On_Main.orig_EntitySpriteDraw_DrawData orig, DrawData data)
 		{
 			int originalShader = Main.CurrentDrawnEntityShader;
 			if (TryUnpackDyeValues(Main.CurrentDrawnEntityShader, out int first, out int second))
@@ -257,6 +206,14 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	[field: CloneByReference]
 	Condition IAmSoldByVanillaNPC.Available { get; } = Condition.Hardmode;
 
+	public override void Load()
+	{
+		On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += Hooks.ReplaceTextures;
+		On_Main.PrepareDrawnEntityDrawing += Hooks.ReplaceUnknownShader;
+		On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float += Hooks.ReplaceEntityTextures;
+		On_Main.EntitySpriteDraw_DrawData += Hooks.ReplaceEntityTexturesDrawData;
+	}
+
 	public override void SetStaticDefaults()
 	{
 		if (!Main.dedServ)
@@ -268,9 +225,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 	public override void SetDefaults()
 	{
-		int dye = Item.dye;
 		Item.CloneDefaults(ItemID.RedDye);
-		Item.dye = dye;
 		Item.value = Item.buyPrice(gold: 10);
 
 		// Just avoid the headache of dealing with stacks.
@@ -281,6 +236,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 		_firstDyeItem = new(0);
 		_secondDyeItem = new(0);
+		Item.dye = GetDyeValue();
 	}
 
 	public override bool CanRightClick()
@@ -301,7 +257,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 				Main.mouseItem = ItemLoader.TransferWithLimit(_firstDyeItem, _firstDyeItem.maxStack);
 			}
 		}
-		else if (Main.mouseItem?.dye > 0 && Main.mouseItem.dye != CombinedDyeShaderIndex) // No recursion, the system can't handle it.
+		else if (Main.mouseItem?.dye > 0 && Main.mouseItem.ModItem is not CombinedDyeItem) // No recursion, the system can't handle it.
 		{
 			if (_firstDyeItem == null || _firstDyeItem.IsAir)
 			{
@@ -312,6 +268,8 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 				_secondDyeItem = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
 			}
 		}
+
+		Item.dye = GetDyeValue();
 	}
 
 	// Needed so right-clicking doesn't destroy the item.
@@ -323,32 +281,34 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	public override void ModifyTooltips(List<TooltipLine> tooltips)
 	{
 		int lastTooltipIndex = tooltips.FindLastIndex(t => t.Mod == "Terraria" && t.Name.StartsWith("Tooltip"));
-		if (lastTooltipIndex != -1)
+		if (lastTooltipIndex == -1)
 		{
-			TooltipLine toInsert;
-			bool firstItemPresent = _firstDyeItem != null && !_firstDyeItem.IsAir;
-			bool secondItemPresent = _secondDyeItem != null && !_secondDyeItem.IsAir;
-			if (firstItemPresent && secondItemPresent)
-			{
-				toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingTwo").Format(_firstDyeItem.Name, _secondDyeItem.Name));
-			}
-			else if (firstItemPresent)
-			{
-				toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_firstDyeItem.Name));
-			}
-			else if (secondItemPresent)
-			{
-				toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_secondDyeItem.Name));
-			}
-			else
-			{
-				_noDyesLineCache ??= new TooltipLine(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalizedValue("MixingNone"));
-				toInsert = _noDyesLineCache;
-			}
-
-			// After last normal tooltip
-			tooltips.Insert(lastTooltipIndex + 1, toInsert);
+			return;
 		}
+
+		TooltipLine toInsert;
+		bool firstItemPresent = _firstDyeItem != null && !_firstDyeItem.IsAir;
+		bool secondItemPresent = _secondDyeItem != null && !_secondDyeItem.IsAir;
+		if (firstItemPresent && secondItemPresent)
+		{
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingTwo").Format(_firstDyeItem.Name, _secondDyeItem.Name));
+		}
+		else if (firstItemPresent)
+		{
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_firstDyeItem.Name));
+		}
+		else if (secondItemPresent)
+		{
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_secondDyeItem.Name));
+		}
+		else
+		{
+			_noDyesLineCache ??= new TooltipLine(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalizedValue("MixingNone"));
+			toInsert = _noDyesLineCache;
+		}
+
+		// After last normal tooltip
+		tooltips.Insert(lastTooltipIndex + 1, toInsert);
 	}
 
 	public int GetDyeValue()
@@ -358,7 +318,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		// Item::dye values are limited between [0, 4000) by PlayerDrawHelper::(Un)PackShader(), so we can get away with just bitwise operations.
 
 		// Default to no dye.
-		int dyeValue = 0;
+		int dyeValue = CombinedDyeShaderIndex;
 
 		// Pack if both are present.
 		if (_firstDyeItem?.dye > 0 && _secondDyeItem?.dye > 0)
@@ -422,6 +382,8 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		{
 			_secondDyeItem = ItemIO.Load(secondItemTag);
 		}
+
+		Item.dye = GetDyeValue();
 	}
 
 	public override void NetSend(BinaryWriter writer)
@@ -434,5 +396,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	{
 		_firstDyeItem = ItemIO.Receive(reader);
 		_secondDyeItem = ItemIO.Receive(reader);
+
+		Item.dye = GetDyeValue();
 	}
 }
