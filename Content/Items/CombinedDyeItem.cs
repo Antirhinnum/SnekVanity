@@ -246,6 +246,8 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	private Item _firstDyeItem, _secondDyeItem;
 
 	int IAmSoldByVanillaNPC.NPC { get; } = NPCID.WitchDoctor;
+
+	[field: CloneByReference]
 	Condition IAmSoldByVanillaNPC.Available { get; } = Condition.Hardmode;
 
 	public override void SetStaticDefaults()
@@ -269,6 +271,9 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		// Prevent duping dyes by stacking several of these and inserting one dye, then removing one-by-one.
 		// Also prevents stacking items with different dyes inside, but that's achievable in other ways.
 		Item.maxStack = 1;
+
+		_firstDyeItem = new(0);
+		_secondDyeItem = new(0);
 	}
 
 	public override bool CanRightClick()
@@ -379,6 +384,14 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		return first > 0 && second > 0;
 	}
 
+	public override ModItem Clone(Item newEntity)
+	{
+		CombinedDyeItem newItem = newEntity.ModItem as CombinedDyeItem;
+		newItem._firstDyeItem = _firstDyeItem?.Clone();
+		newItem._secondDyeItem = _secondDyeItem?.Clone();
+		return base.Clone(newEntity);
+	}
+
 	public override void SaveData(TagCompound tag)
 	{
 		if (_firstDyeItem != null && !_firstDyeItem.IsAir)
@@ -406,8 +419,8 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 	public override void NetSend(BinaryWriter writer)
 	{
-		ItemIO.Send(_firstDyeItem, writer);
-		ItemIO.Send(_secondDyeItem, writer);
+		ItemIO.Send(_firstDyeItem ??= new(0), writer);
+		ItemIO.Send(_secondDyeItem ??= new(0), writer);
 	}
 
 	public override void NetReceive(BinaryReader reader)

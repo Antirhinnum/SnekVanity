@@ -1,4 +1,2 @@
-[list][*]Added the Forbidden Sigil.
-[*]Fixed equipped birds sometimes not showing up until the NPC version of them was seen in the world.
-[*]Fixed the Armless Harness crashing the game when modded body equips were used.
-[*]Clarified the Mysterious Dye Bottle's tooltip.[/list]
+[list][*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
+[*]Fixed a bug where the Mysterious Dye Bottle could lose stored information.[/list]
