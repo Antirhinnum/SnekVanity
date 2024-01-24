@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using SnekVanity.Core;
+﻿using SnekVanity.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,15 +7,12 @@ namespace SnekVanity.Content.Items;
 
 public sealed class PantsDyeItem : ModItem, IDyePants, IAmSoldByVanillaNPC
 {
-	public override string Texture => $"Terraria/Images/Item_" + ItemID.Paintbrush;
-
 	int IAmSoldByVanillaNPC.NPC => NPCID.DyeTrader;
 
 	public override void SetDefaults()
 	{
-		Item.accessory = true;
+		Item.DefaultToAccessory();
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
-		Item.color = Color.Teal;
 	}
 }

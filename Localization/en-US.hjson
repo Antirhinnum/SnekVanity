@@ -74,12 +74,8 @@ Mods: {
 			}
 
 			PantsDyeItem: {
-				DisplayName: Pants-Dye Kit
-				Tooltip:
-					'''
-					'First, pants the clothing, then submerge it in dye'
-					Can dye your pants
-					'''
+				DisplayName: Tie-Dye Bucket
+				Tooltip: Applies dye to your pants
 			}
 
 			ScleraDyeItem: {
@@ -92,16 +88,16 @@ Mods: {
 				Tooltip:
 					'''
 					'Incredibly messy'
-					Can dye your shirt
+					Applies dye to you shirt
 					'''
 			}
 
 			ShoesDyeItem: {
-				DisplayName: Colored Shoe Polish
+				DisplayName: Shoe Polish
 				Tooltip:
 					'''
 					'Spit-shine!'
-					Can dye your shoes
+					Applies dye to your shoes
 					'''
 			}
 
@@ -110,7 +106,7 @@ Mods: {
 				Tooltip:
 					'''
 					'Just as messy as the normal kind'
-					Can dye your undershirt
+					Applies dye to your undershirt
 					'''
 			}
 
