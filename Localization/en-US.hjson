@@ -8,29 +8,26 @@ Mods: {
 
 		Items: {
 			AllSkinDyeItem: {
-				DisplayName: Non-Toxic Paint Roller
-				Tooltip:
-					'''
-					'100% safe, guaranteed!*'
-					Can dye your skin
-					'''
+				DisplayName: Face Paint
+				Tooltip: Applies dye to skin
 			}
 
 			AlwaysClosedContacts: {
-				DisplayName: Adhesive Contacts
+				DisplayName: Eye Caps
 				Tooltip:
 					'''
-					'See no evil... or anything else, for that matter'
-					Forces your eyes closed
+					'For mortician use only'
+					Forces eyes closed
+					<right> to fold in half
 					'''
 			}
 
 			AlwaysOpenContacts: {
-				DisplayName: Ludovico Contacts
+				DisplayName: Wire Speculums
 				Tooltip:
 					'''
-					'All the suffering with none of the setup!'
-					Forces your eyes open
+					Forces eyes open
+					<right> to fold in half
 					'''
 			}
 
@@ -40,11 +37,11 @@ Mods: {
 			}
 
 			EyeDyeItem: {
-				DisplayName: Colored Contacts
+				DisplayName: Contact Lenses
 				Tooltip:
 					'''
 					'Made with the finest glass around!'
-					Can dye your eyes
+					Applies dye to cornea
 					'''
 			}
 
@@ -58,20 +55,21 @@ Mods: {
 			}
 
 			NeverClosedContacts: {
-				DisplayName: Ludovico Lite
+				DisplayName: Semi-Speculums
 				Tooltip:
 					'''
-					'You can close your eyes a little, as a treat'
-					Forces your eyes to never be fully closed
+					Forces eyes to never be fully closed
+					<right> to fold in half
 					'''
 			}
 
 			NeverOpenContacts: {
-				DisplayName: Misshapen Contacts
+				DisplayName: Half Caps
 				Tooltip:
 					'''
-					'Hurt like hell, but at least you look cool!'
-					Forces your eyes to never be fully open
+					'Still only for dead bodies'
+					Forces eyes to never be fully open
+					<right> to unfold
 					'''
 			}
 
@@ -85,12 +83,8 @@ Mods: {
 			}
 
 			ScleraDyeItem: {
-				DisplayName: Colored Eyedrops
-				Tooltip:
-					'''
-					'It'll only sting for a second'
-					Can dye the whites of your eyes
-					'''
+				DisplayName: Scleral Contacts
+				Tooltip: Applies dye to sclera
 			}
 
 			ShirtDyeItem: {
@@ -125,19 +119,17 @@ Mods: {
 				Tooltip:
 					'''
 					'Try not to stain the sink!'
-					Can dye your hair, even when not wearing the {$ItemName.FamiliarWig}
+					Applies dye to hair
 					'''
 			}
 
 			CombinedDyeItem: {
-				DisplayName: Mysterious Dye Bottle
+				DisplayName: DIY Dye
 				Tooltip:
 					'''
-					'Witchcraft is afoot...'
-					Combines the effects of dyes put into it
+					Combines the effects of two dyes put into it
 					<right> this item with a dye in hand to add it
 					<right> this item with an empty hand to take a dye out
-					Up to two dyes can be added
 					'''
 				MixingNone: Mixing: No dyes...
 				MixingOne: Mixing: {0}

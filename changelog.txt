@@ -1,3 +1,13 @@
-[list][*]Fixed the Forbidden Sigil not selling for anything.
+[list][*]Several items have been resprited and renamed:[list][*]Non-Toxic Paint Roller -> Face Paint
+[*]Adhesive Contacts -> Eye Caps
+[*]Ludovico Contacts -> Wire Speculums
+[*]Colored Contacts -> Contact Lenses
+[*]Ludovico Lite -> Semi-Speculums
+[*]Misshapen Contacts -> Half Caps
+[*]Colored Eyedrops -> Scleral Contacts
+[*]Mysterious Dye Bottle -> DIY Dye Bottle
+[/list]
+[*]The Semi-Speculums and Half Caps are now obtainable by right-clicking the Wire Speculums and Eye Caps, respectively. This is reversible.
+[*]Fixed the Forbidden Sigil not selling for anything.
 [*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
 [*]Fixed a bug where the Mysterious Dye Bottle could lose stored information.[/list]

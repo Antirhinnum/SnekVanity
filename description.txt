@@ -18,3 +18,4 @@ Credits:
 - The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness and Shoulder Birds.
 - Voyd: Idea for the DIY Hair Dye.
 - Keegerwocky: Idea for using hair dyes as armor dyes.
+- Skulgan: Sprites for several items.

@@ -1,23 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using SnekVanity.Core;
+﻿using SnekVanity.Core;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace SnekVanity.Content.Items;
 
-public sealed class NeverClosedContacts : ModItem, IForceEyeState, IAmAsymmetricSpecial, IAmSoldByVanillaNPC
+public sealed class NeverClosedContacts : ModItem, IForceEyeState, IAmAsymmetricSpecial
 {
-	public override string Texture => "Terraria/Images/Item_" + ItemID.Lens;
-
-	int IAmSoldByVanillaNPC.NPC => NPCID.Stylist;
-
 	public override void SetDefaults()
 	{
-		Item.accessory = true;
+		Item.DefaultToAccessory();
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
-		Item.color = Color.Blue;
 	}
 
 	EyeFrame IForceEyeState.SetEyeState(Player player, EyeFrame oldFrame)
@@ -27,5 +20,20 @@ public sealed class NeverClosedContacts : ModItem, IForceEyeState, IAmAsymmetric
 			EyeFrame.EyeClosed => EyeFrame.EyeHalfClosed,
 			_ => oldFrame
 		};
+	}
+
+	public override bool CanRightClick()
+	{
+		return true;
+	}
+
+	public override void RightClick(Player player)
+	{
+		Item.ChangeItemType(ModContent.ItemType<AlwaysOpenContacts>());
+	}
+
+	public override bool ConsumeItem(Player player)
+	{
+		return false;
 	}
 }
