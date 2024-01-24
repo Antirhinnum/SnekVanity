@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using SnekVanity.Core;
 using System.Collections.Generic;
 using System.IO;
@@ -197,6 +198,8 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 	}
 
 	private static TooltipLine _noDyesLineCache;
+	private static Asset<Texture2D> _dyeBottleAsset;
+	private static Asset<Texture2D> _dyeFluidAsset;
 	internal static int CombinedDyeShaderIndex { get; private set; }
 
 	private Item _firstDyeItem, _secondDyeItem;
@@ -212,6 +215,19 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		On_Main.PrepareDrawnEntityDrawing += Hooks.ReplaceUnknownShader;
 		On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float += Hooks.ReplaceEntityTextures;
 		On_Main.EntitySpriteDraw_DrawData += Hooks.ReplaceEntityTexturesDrawData;
+
+		if (!Main.dedServ)
+		{
+			_dyeBottleAsset = ModContent.Request<Texture2D>(Texture + "_Bottle");
+			_dyeFluidAsset = ModContent.Request<Texture2D>(Texture + "_Fluid");
+		}
+	}
+
+	public override void Unload()
+	{
+		_noDyesLineCache = null;
+		_dyeBottleAsset = null;
+		_dyeFluidAsset = null;
 	}
 
 	public override void SetStaticDefaults()
@@ -278,6 +294,100 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		return false;
 	}
 
+	public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+	{
+		if (Item.dye == CombinedDyeShaderIndex)
+		{
+			return base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
+		}
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, null, null, Main.UIScaleMatrix);
+
+		// If this return true: rendered and active are the correct dyes.
+		// Otherwise: Don't try and pre-render a texture, just draw the one available dye .
+		if (!TryUnpackDyeValues(Item.dye, out int rendered, out int active))
+		{
+			rendered = 0;
+			active = Item.dye;
+		}
+
+		Texture2D fluidTexture = _dyeFluidAsset.Value;
+		if (rendered > 0)
+		{
+			CombinedDyeRenderTarget target = CombinedDyeRenderTarget.GetAndRequestTargetInstance(Main.LocalPlayer, fluidTexture, rendered);
+			if (target.IsReady)
+			{
+				fluidTexture = target.GetTarget();
+			}
+		}
+
+		DrawData data = new(fluidTexture, position, frame, drawColor, 0f, origin, scale, SpriteEffects.None)
+		{
+			shader = active
+		};
+		PlayerDrawHelper.SetShaderForData(null, 0, ref data);
+		data.Draw(spriteBatch);
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+
+		spriteBatch.Draw(_dyeBottleAsset.Value, position, frame, drawColor, 0f, origin, scale, SpriteEffects.None, 0f);
+		return false;
+	}
+
+	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+	{
+	}
+
+	public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
+	{
+		if (_firstDyeItem?.dye <= 0 && _secondDyeItem?.dye <= 0)
+		{
+			return base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
+		}
+
+		Rectangle frame = _dyeBottleAsset.Frame();
+		Vector2 origin = frame.Size() / 2f;
+		Vector2 offset = new((Item.width / 2) - origin.X, Item.height - frame.Height);
+		Vector2 drawPosition = Item.position - Main.screenPosition + origin + offset;
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+
+		// If this return true: rendered and active are the correct dyes.
+		// Otherwise: Don't try and pre-render a texture, just draw the one available dye .
+		if (!TryUnpackDyeValues(Item.dye, out int rendered, out int active))
+		{
+			rendered = 0;
+			active = Item.dye;
+		}
+
+		Texture2D fluidTexture = _dyeFluidAsset.Value;
+		if (rendered > 0)
+		{
+			CombinedDyeRenderTarget target = CombinedDyeRenderTarget.GetAndRequestTargetInstance(Main.LocalPlayer, fluidTexture, rendered);
+			if (target.IsReady)
+			{
+				fluidTexture = target.GetTarget();
+			}
+		}
+
+		DrawData data = new(fluidTexture, drawPosition, frame, alphaColor, rotation, origin, scale, SpriteEffects.None)
+		{
+			shader = active
+		};
+		PlayerDrawHelper.SetShaderForData(null, 0, ref data);
+		data.Draw(spriteBatch);
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+
+		spriteBatch.Draw(_dyeBottleAsset.Value, drawPosition, frame, alphaColor, rotation, origin, scale, SpriteEffects.None, 0f);
+
+		return false;
+	}
+
 	public override void ModifyTooltips(List<TooltipLine> tooltips)
 	{
 		int lastTooltipIndex = tooltips.FindLastIndex(t => t.Mod == "Terraria" && t.Name.StartsWith("Tooltip"));
@@ -291,15 +401,15 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		bool secondItemPresent = _secondDyeItem != null && !_secondDyeItem.IsAir;
 		if (firstItemPresent && secondItemPresent)
 		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingTwo").Format(_firstDyeItem.Name, _secondDyeItem.Name));
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingTwo").Format(_firstDyeItem.type, _secondDyeItem.type));
 		}
 		else if (firstItemPresent)
 		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_firstDyeItem.Name));
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_firstDyeItem.type));
 		}
 		else if (secondItemPresent)
 		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_secondDyeItem.Name));
+			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", this.GetLocalization("MixingOne").Format(_secondDyeItem.type));
 		}
 		else
 		{

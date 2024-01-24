@@ -124,7 +124,7 @@ Mods: {
 			}
 
 			CombinedDyeItem: {
-				DisplayName: DIY Dye
+				DisplayName: DIY Dye Bottle
 				Tooltip:
 					'''
 					Combines the effects of two dyes put into it
@@ -132,8 +132,8 @@ Mods: {
 					<right> this item with an empty hand to take a dye out
 					'''
 				MixingNone: Mixing: No dyes...
-				MixingOne: Mixing: {0}
-				MixingTwo: Mixing: {0} and {1}
+				MixingOne: Mixing: [i:{0}]
+				MixingTwo: Mixing: [i:{0}] and [i:{1}]
 			}
 
 			ForbiddenArmorSigilItem: {

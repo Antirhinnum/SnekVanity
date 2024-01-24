@@ -8,6 +8,8 @@
 [*]Mysterious Dye Bottle -> DIY Dye Bottle
 [/list]
 [*]The Semi-Speculums and Half Caps are now obtainable by right-clicking the Wire Speculums and Eye Caps, respectively. This is reversible.
+[*]The DIY Dye Bottle now shows the item icons of the mixed dyes instead of the names.
+[*]The DIY Dye Bottle now shows the effect of the mixed dyes on the item sprite.
 [*]Fixed the Forbidden Sigil not selling for anything.
 [*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
 [*]Fixed a bug where the Mysterious Dye Bottle could lose stored information.[/list]
