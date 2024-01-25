@@ -140,6 +140,17 @@ Mods: {
 					If you already have a sigil, dyeing this item dyes the sigil
 					'''
 			}
+
+			JapaneseUmbrellaItem: {
+				DisplayName: Wanderer's Umbrella
+				TooltipFlavor: "'From where it came from, none may know, but it is now yours to wield as a shield against the elements'"
+				TooltipStandalone:
+					'''
+					{$TooltipFlavor}
+					{$ItemTooltip.Umbrella}
+					'''
+				TooltipParasol: "{$TooltipFlavor}"
+			}
 		}
 	}
 }

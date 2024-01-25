@@ -7,6 +7,7 @@ Content Summary:
 [*]A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
 [*]A harness that allows you to hide your arms.
 [*]A generic bracelet.
+[*]A Japanese umbrella. If you have the mod [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2581208060]Equipable Umbrellas[/url] installed, you can equip this umbrella as well.
 [*]A dye that combines any two dyes you want it to.
 [*]A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 [*]You can now use paints and hair dyes as normal dyes.
@@ -18,6 +19,6 @@ Credits:[list]
 [*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, idea for the Armless Harness and Shoulder Birds.
 [*]Voyd: Idea for the DIY Hair Dye.
 [*]Keegerwocky: Idea for using hair dyes as armor dyes.
-[*]Skulgan: Sprites for several items, ideas for DIY Dye Bottle visuals.[/list]
+[*]Skulgan: Sprites for several items, ideas for DIY Dye Bottle visuals, idea and sprites for the Wanderer's Umbrella.[/list]
 
 [url=https://github.com/Antirhinnum/SnekVanity]Source on GitHub[/url]

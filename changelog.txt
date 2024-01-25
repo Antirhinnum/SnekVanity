@@ -1,4 +1,5 @@
-[list][*]Several items have been resprited and renamed:[list][*]Non-Toxic Paint Roller -> Face Paint
+[list][*]Added the Wanerer''s Umbrella.
+[*]Several items have been resprited and renamed:[list][*]Non-Toxic Paint Roller -> Face Paint
 [*]Adhesive Contacts -> Eye Caps
 [*]Ludovico Contacts -> Wire Speculums
 [*]Colored Contacts -> Contact Lenses
