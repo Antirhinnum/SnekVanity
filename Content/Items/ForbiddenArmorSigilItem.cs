@@ -107,12 +107,14 @@ public sealed class ForbiddenArmorSigilItem : ModItem
 		Recipe firstRecipe = CreateRecipe()
 			.AddIngredient(ItemID.AncientBattleArmorMaterial)
 			.AddIngredient(ItemID.AdamantiteBar, 4)
+			.AddTile(TileID.MythrilAnvil)
 			.SortAfter(Main.recipe.First(r => r.HasIngredient(ItemID.TitaniumBar) && r.HasResult(ItemID.AncientBattleArmorPants))) // Try to ensure this is after vanilla's recipe and not some alternative mod recipe
 			.Register();
 
 		CreateRecipe()
 			.AddIngredient(ItemID.AncientBattleArmorMaterial)
 			.AddIngredient(ItemID.TitaniumBar, 4)
+			.AddTile(TileID.MythrilAnvil)
 			.SortAfter(firstRecipe)
 			.DisableDecraft()
 			.Register();

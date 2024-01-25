@@ -14,6 +14,7 @@
 [*]The DIY Dye Bottle now shows the item icons of the mixed dyes instead of the names.
 [*]The DIY Dye Bottle now shows the effect of the mixed dyes on the item sprite.
 [*]Fixed the Forbidden Sigil not selling for anything.
+[*]Fixed the Forbidden Sigil not being crafted at a Mythril Anvil.
 [*]Fixed a bug where the Mysterious Dye Bottle would freeze multiplayer clients.
 [*]Fixed a bug where the Mysterious Dye Bottle could lose stored information.
 [*]The Mysterious Dye Bottle should now be more compatible with custom equipment slots.[/list]
