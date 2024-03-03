@@ -326,7 +326,14 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		{
 			shader = active
 		};
-		PlayerDrawHelper.SetShaderForData(null, 0, ref data);
+		PlayerDrawHelper.SetShaderForData(Main.LocalPlayer, 0, ref data);
+
+		// Special handling for hair dyes, since most of them just change the color parameter rather than using a shader.
+		PlayerDrawHelper.UnpackShader(active, out int maybeHairShader, out PlayerDrawHelper.ShaderConfiguration shaderType);
+		if (shaderType == PlayerDrawHelper.ShaderConfiguration.HairShader)
+		{
+			data.color = GameShaders.Hair.GetColor(maybeHairShader, Main.LocalPlayer, Color.White);
+		}
 		data.Draw(spriteBatch);
 
 		spriteBatch.End();
