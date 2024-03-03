@@ -121,12 +121,28 @@ public sealed class JapaneseUmbrellaItem : ModItem, IEquippableParasol
 		}
 	}
 
-	public override void AddRecipes()
+	//public override void AddRecipes()
+	//{
+	//	CreateRecipe()
+	//		.AddIngredient(ItemID.DynastyWood, 12)
+	//		.AddIngredient(ItemID.Firefly, 3)
+	//		.AddTile(TileID.WorkBenches)
+	//		.Register();
+	//}
+
+	public sealed class SellJapaneseUmbrellaNPC : GlobalNPC
 	{
-		CreateRecipe()
-			.AddIngredient(ItemID.DynastyWood, 12)
-			.AddIngredient(ItemID.Firefly, 3)
-			.AddTile(TileID.WorkBenches)
-			.Register();
+		public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
+		{
+			return entity.type == NPCID.Merchant;
+		}
+
+		public override void ModifyShop(NPCShop shop)
+		{
+			if (shop.Name == "Shop") // Only add to the main shop if some mod adds another one
+			{
+				shop.Add<JapaneseUmbrellaItem>(Condition.InRain);
+			}
+		}
 	}
 }
