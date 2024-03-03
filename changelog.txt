@@ -1,3 +1,5 @@
-[list][*]Changed the Wanderer's Umbrella to be sold by the Merchant in the rain instead of being crafted.
+[list][*]Added the Complete Coloring Kit, a combination of all four clothing-dyeing items.
+[*]Added the Complete Coloring Kit Plus, a combination of every player-dyeing item in the mod.
+[*]Changed the Wanderer's Umbrella to be sold by the Merchant in the rain instead of being crafted.
 [*]Fixed a typo in the Tie-Dye Kit's tooltip ("Applies dye to you shirt" -> "Applies dye to your shirt").
 [*]Fixed a bug where the DIY Dye would break if a Hair Dye was placed inside of it.[/list]

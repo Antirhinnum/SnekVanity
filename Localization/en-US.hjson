@@ -151,6 +151,24 @@ Mods: {
 					'''
 				TooltipParasol: "{$TooltipFlavor}"
 			}
+
+			AllClothesDyeItem: {
+				DisplayName: Complete Coloring Kit
+				Tooltip:
+					'''
+					'It's like jumping into a vat of paint'
+					Applies dye to your clothing
+					'''
+			}
+
+			AllPlayerTexturesDyeItem: {
+				DisplayName: Complete Coloring Kit Plus
+				Tooltip:
+					'''
+					'Better than jumping into a vat of paint'
+					Applies dye to your skin, clothing, eyes, and hair
+					'''
+			}
 		}
 	}
 }
