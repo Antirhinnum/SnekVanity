@@ -1,5 +1,4 @@
-﻿using System;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -7,8 +6,8 @@ namespace SnekVanity.Common.Hooks;
 
 public interface IAddEquipSlots : IAddDyeSlots
 {
-	public static readonly HookList<ModPlayer> UpdateEquipSlotHook = PlayerLoader.AddModHook(new HookList<ModPlayer>(typeof(IAddEquipSlots).GetMethod(nameof(UpdateEquipSlot), new Type[] { typeof(Item) })));
-	public static readonly HookList<ModPlayer> ResetVisibleAccessoriesHook = PlayerLoader.AddModHook(new HookList<ModPlayer>(typeof(IAddEquipSlots).GetMethod(nameof(ResetVisibleAccessories), Type.EmptyTypes)));
+	public static readonly HookList<ModPlayer> UpdateEquipSlotHook = PlayerLoader.AddModHook(HookList<ModPlayer>.Create(p => ((IAddEquipSlots)p).UpdateEquipSlot));
+	public static readonly HookList<ModPlayer> ResetVisibleAccessoriesHook = PlayerLoader.AddModHook(HookList<ModPlayer>.Create(p => ((IAddEquipSlots)p).ResetVisibleAccessories));
 
 	void UpdateEquipSlot(Item item);
 

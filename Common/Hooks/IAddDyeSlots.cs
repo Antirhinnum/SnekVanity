@@ -7,8 +7,8 @@ namespace SnekVanity.Common.Hooks;
 
 public interface IAddDyeSlots
 {
-	public static readonly HookList<ModPlayer> UpdateDyeSlotsHook = PlayerLoader.AddModHook(new HookList<ModPlayer>(typeof(IAddDyeSlots).GetMethod(nameof(UpdateDyeSlots), new Type[] { typeof(Item), typeof(Item) })));
-	public static readonly HookList<ModPlayer> ClearDyeSlotsHook = PlayerLoader.AddModHook(new HookList<ModPlayer>(typeof(IAddDyeSlots).GetMethod(nameof(ClearDyeSlots), Type.EmptyTypes)));
+	public static readonly HookList<ModPlayer> UpdateDyeSlotsHook = PlayerLoader.AddModHook(HookList<ModPlayer>.Create(p => ((IAddDyeSlots)p).UpdateDyeSlots));
+	public static readonly HookList<ModPlayer> ClearDyeSlotsHook = PlayerLoader.AddModHook(HookList<ModPlayer>.Create(p => ((IAddDyeSlots)p).ClearDyeSlots));
 
 	void UpdateDyeSlots(Item armorItem, Item dyeItem);
 
