@@ -19,7 +19,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 {
 	private static class Hooks
 	{
-		public static void ReplaceTextures(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo)
+		public static void ReplacePlayerTextures(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo)
 		{
 			for (int i = 0; i < drawinfo.DrawDataCache.Count; i++)
 			{
@@ -61,29 +61,19 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 			orig(self, entity, intendedShader, overrideMatrix);
 		}
 
-		public static void ReplaceEntityTextures(On_Main.orig_EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float orig, Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float worthless)
+		// These three hooks are applied in the main Mod constructor, since they need to be done before any Main::EntitySpriteDraw() calls get inlined.
+		public static void ReplaceEntityTexturesFloatScale(On_Main.orig_EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_float_SpriteEffects_float orig, Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float worthless)
 		{
 			int originalShader = Main.CurrentDrawnEntityShader;
-			if (TryUnpackDyeValues(Main.CurrentDrawnEntityShader, out int first, out int second))
-			{
-				Player suppliedPlayer = null;
-				if (Main.CurrentDrawnEntity is Player player)
-				{
-					suppliedPlayer = player;
-				}
-				else if (Main.CurrentDrawnEntity is Projectile projectile)
-				{
-					suppliedPlayer = Main.player[projectile.owner];
-				}
+			TryReplacingTextureAndEntityShader(ref texture);
+			orig(texture, position, sourceRectangle, color, rotation, origin, scale, effects, worthless);
+			Main.CurrentDrawnEntityShader = originalShader;
+		}
 
-				CombinedDyeRenderTarget target = CombinedDyeRenderTarget.GetAndRequestTargetInstance(suppliedPlayer, texture, first);
-				if (target.IsReady)
-				{
-					texture = target.GetTarget();
-				}
-				Main.CurrentDrawnEntityShader = second;
-			}
-
+		public static void ReplaceEntityTexturesVector2Scale(On_Main.orig_EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float orig, Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float worthless)
+		{
+			int originalShader = Main.CurrentDrawnEntityShader;
+			TryReplacingTextureAndEntityShader(ref texture);
 			orig(texture, position, sourceRectangle, color, rotation, origin, scale, effects, worthless);
 			Main.CurrentDrawnEntityShader = originalShader;
 		}
@@ -91,28 +81,34 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 		public static void ReplaceEntityTexturesDrawData(On_Main.orig_EntitySpriteDraw_DrawData orig, DrawData data)
 		{
 			int originalShader = Main.CurrentDrawnEntityShader;
-			if (TryUnpackDyeValues(Main.CurrentDrawnEntityShader, out int first, out int second))
-			{
-				Player suppliedPlayer = null;
-				if (Main.CurrentDrawnEntity is Player player)
-				{
-					suppliedPlayer = player;
-				}
-				else if (Main.CurrentDrawnEntity is Projectile projectile)
-				{
-					suppliedPlayer = Main.player[projectile.owner];
-				}
-
-				CombinedDyeRenderTarget target = CombinedDyeRenderTarget.GetAndRequestTargetInstance(suppliedPlayer, data.texture, first);
-				if (target.IsReady)
-				{
-					data.texture = target.GetTarget();
-				}
-				Main.CurrentDrawnEntityShader = second;
-			}
-
+			TryReplacingTextureAndEntityShader(ref data.texture);
 			orig(data);
 			Main.CurrentDrawnEntityShader = originalShader;
+		}
+
+		private static void TryReplacingTextureAndEntityShader(ref Texture2D texture)
+		{
+			if (!TryUnpackDyeValues(Main.CurrentDrawnEntityShader, out int first, out int second))
+			{
+				return;
+			}
+
+			Player suppliedPlayer = null;
+			if (Main.CurrentDrawnEntity is Player player)
+			{
+				suppliedPlayer = player;
+			}
+			else if (Main.CurrentDrawnEntity is Projectile projectile)
+			{
+				suppliedPlayer = Main.player[projectile.owner];
+			}
+
+			CombinedDyeRenderTarget target = CombinedDyeRenderTarget.GetAndRequestTargetInstance(suppliedPlayer, texture, first);
+			if (target.IsReady)
+			{
+				texture = target.GetTarget();
+			}
+			Main.CurrentDrawnEntityShader = second;
 		}
 	}
 
@@ -184,7 +180,7 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 				return;
 			}
 
-			PrepareARenderTarget_AndListenToEvents(ref _target, device, _texture.Width, _texture.Height, RenderTargetUsage.DiscardContents);
+			PrepareARenderTarget_AndListenToEvents(ref _target, device, _texture.Width, _texture.Height, RenderTargetUsage.PreserveContents);
 			device.SetRenderTarget(_target);
 			device.Clear(Color.Transparent);
 			DrawData value = new(_texture, Vector2.Zero, Color.White) { shader = _shaderIndex };
@@ -211,16 +207,21 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 	public override void Load()
 	{
-		On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += Hooks.ReplaceTextures;
+		On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += Hooks.ReplacePlayerTextures;
 		On_Main.PrepareDrawnEntityDrawing += Hooks.ReplaceUnknownShader;
-		On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float += Hooks.ReplaceEntityTextures;
-		On_Main.EntitySpriteDraw_DrawData += Hooks.ReplaceEntityTexturesDrawData;
 
-		if (!Main.dedServ)
-		{
-			_dyeBottleAsset = ModContent.Request<Texture2D>(Texture + "_Bottle");
-			_dyeFluidAsset = ModContent.Request<Texture2D>(Texture + "_Fluid");
-		}
+		_dyeBottleAsset = ModContent.Request<Texture2D>(Texture + "_Bottle");
+		_dyeFluidAsset = ModContent.Request<Texture2D>(Texture + "_Fluid");
+	}
+
+	// Called from the main Mod constructor.
+	// If these hooks aren't done ASAP, then some Main::EntitySpriteDraw() calls get inlined -- notably, for projectile drawing.
+	// This breaks the DIY Dye when used with Pet Shampoo or other projectile-dyeing items.
+	internal static void DoSuperEarlyHooks()
+	{
+		On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_float_SpriteEffects_float += Hooks.ReplaceEntityTexturesFloatScale;
+		On_Main.EntitySpriteDraw_Texture2D_Vector2_Nullable1_Color_float_Vector2_Vector2_SpriteEffects_float += Hooks.ReplaceEntityTexturesVector2Scale;
+		On_Main.EntitySpriteDraw_DrawData += Hooks.ReplaceEntityTexturesDrawData;
 	}
 
 	public override void Unload()
