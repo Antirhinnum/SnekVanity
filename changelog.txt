@@ -1,3 +1,5 @@
 Snek's Misc. Vanity Version v{ModVersion}
 
-[list][*](Hopefully) fixed the DIY Dye Bottle not always working with Critter Shampoo.[/list]
+[list][*]Added equip textures for the following items:[list][*]Amethyst Staff[*]Topaz Staff[*]Sapphire Staff[*]Emerald Staff[*]Ruby Staff[*]Diamond Staff[*]Amber Staff[*]Frost Staff[*]Shadowbeam Staff[/list]
+Equip the weapons in your social accessory slots to hold them!
+[*]Added tooltips to the staffs above and all wearable birds informing players that they can be worn now.[/list]

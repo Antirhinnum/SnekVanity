@@ -4,6 +4,7 @@ Mods: {
 			CanAlsoUseAsDye: Can also be used as dye
 			PaintsAsDyesItem: "{$CanAlsoUseAsDye}"
 			HairDyesAsDyesItem: "{$CanAlsoUseAsDye}"
+			CanBeWorn: Can also be worn as a vanity accessory
 		}
 
 		Items: {

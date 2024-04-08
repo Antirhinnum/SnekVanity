@@ -1,4 +1,5 @@
 ﻿using SnekVanity.Common.Players;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -16,5 +17,10 @@ public sealed class ShoulderBirdItem : GlobalItem
 		entity.accessory = true;
 		entity.vanity = true;
 		entity.StatsModifiedBy.Add(Mod);
+	}
+
+	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+	{
+		tooltips.Add(SnekVanity.CanBeWornTooltipLine);
 	}
 }
