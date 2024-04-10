@@ -1,5 +1,4 @@
-using SnekVanity.Common.Systems;
-using SnekVanity.Content.Items;
+using SnekVanity.Content.CombinedDye;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
