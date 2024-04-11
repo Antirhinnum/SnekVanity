@@ -175,6 +175,18 @@ Mods: {
 				DisplayName: "{$ItemName.EyePatch} (Layered)"
 				Tooltip: Can be worn under hats
 			}
+
+			BowstaffItem: {
+				DisplayName: Bowstaff
+				Tooltip: ""
+			}
+
+			WalkingStickItem: {
+				DisplayName: Walking Stick
+				Tooltip: Slightly increases acceleration
+			}
 		}
+
+		Projectiles.BowstaffProjectile.DisplayName: "{$Items.BowstaffItem.DisplayName}"
 	}
 }

@@ -9,15 +9,16 @@ Content Summary:
 [*]A generic bracelet.
 [*]An eye patch that can be worn with hats.
 [*]A Japanese umbrella. If you have the mod [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2581208060]Equipable Umbrellas[/url] installed, you can equip this umbrella as well.
+* A walking stick and a bowstaff, with both visual and functional appeal.
 [*]A dye that combines any two dyes you want it to.
 [*]A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 [*]You can now use paints and hair dyes as normal dyes.
 [*]You can now wear some birds on your shoulders and hold some magic staves.[/list]
 
-All items in the mod can be purchased from various NPCs -- see the Discussions tab for specifics.
+See the Discussions tab for how to obtain all the items in this mod.
 
 Credits:[list]
-[*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, equip sprites for all held staves, ideas for the Armless Harness, Shoulder Birds, and held staves.
+[*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, equip sprites for all held staves, all sprites for the Walking Stick and Bowstaff, ideas for the Armless Harness, Shoulder Birds, held staves, Walking Stick, and Bowstaff.
 [*]Voyd: Idea for the DIY Hair Dye.
 [*]Keegerwocky: Idea for using hair dyes as armor dyes.
 [*]Skulgan: Sprites for several items, ideas for DIY Dye Bottle visuals, idea and sprites for the Wanderer's Umbrella.[/list]

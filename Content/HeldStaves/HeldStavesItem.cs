@@ -21,7 +21,8 @@ public sealed class HeldStavesItem : GlobalItem
 		{ ItemID.DiamondStaff, -1 },
 		{ ItemID.AmberStaff, -1 },
 		{ ItemID.FrostStaff, -1 },
-		{ ItemID.ShadowbeamStaff, -1 }
+		{ ItemID.ShadowbeamStaff, -1 },
+		{ ItemID.AquaScepter, -1 }
 	};
 
 	public override bool AppliesToEntity(Item entity, bool lateInstantiation)
@@ -33,9 +34,11 @@ public sealed class HeldStavesItem : GlobalItem
 	{
 		foreach (int staveItemType in _staveItemTypeToBalloonEquipId.Keys)
 		{
-			// WARNING: This will break for modded items, as they aren't added to ItemID::Search yet.
-			string name = ItemID.Search.GetName(staveItemType);
-			_staveItemTypeToBalloonEquipId[staveItemType] = EquipLoader.AddEquipTexture(Mod, _staveAssetPathHead + name, EquipType.Balloon, name: "HeldStave_" + name);
+			if (staveItemType < ItemID.Count)
+			{
+				string name = ItemID.Search.GetName(staveItemType);
+				_staveItemTypeToBalloonEquipId[staveItemType] = EquipLoader.AddEquipTexture(Mod, _staveAssetPathHead + name, EquipType.Balloon, name: "HeldStave_" + name);
+			}
 		}
 	}
 
@@ -50,6 +53,12 @@ public sealed class HeldStavesItem : GlobalItem
 
 	public override void SetDefaults(Item entity)
 	{
+		// Assume these are already set on modded items.
+		if (entity.type >= ItemID.Count)
+		{
+			return;
+		}
+
 		if (_staveItemTypeToBalloonEquipId.TryGetValue(entity.type, out int slot))
 		{
 			entity.balloonSlot = slot;
@@ -65,8 +74,12 @@ public sealed class HeldStavesItem : GlobalItem
 
 	public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
 	{
-		tooltips.Add(SnekVanity.CanBeWornTooltipLine);
+		if (item.damage > 0)
+		{
+			tooltips.Add(SnekVanity.CanBeWornTooltipLine);
+		}
 	}
 
 	internal static bool IsBalloonIdAHeldStave(int balloonId) => _staveItemTypeToBalloonEquipId.Values.Contains(balloonId);
+	internal static void AddStaveItem(Item item) => _staveItemTypeToBalloonEquipId[item.type] = item.balloonSlot;
 }
