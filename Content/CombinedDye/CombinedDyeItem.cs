@@ -390,10 +390,10 @@ public sealed class CombinedDyeItem : ModItem, IAmSoldByVanillaNPC
 
 	public override ModItem Clone(Item newEntity)
 	{
-		CombinedDyeItem newItem = newEntity.ModItem as CombinedDyeItem;
+		CombinedDyeItem newItem = base.Clone(newEntity) as CombinedDyeItem;
 		newItem._firstDyeItem = _firstDyeItem?.Clone();
 		newItem._secondDyeItem = _secondDyeItem?.Clone();
-		return base.Clone(newEntity);
+		return newItem;
 	}
 
 	public override void SaveData(TagCompound tag)
