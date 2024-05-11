@@ -33,7 +33,7 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 	{
 		foreach (int itemId in _registeredBirds.Keys)
 		{
-			AsymmetricEquipsSystem.AsymmetricEquips_AddSpecialItem(itemId, AsymmetricEquipsSystem.LEFT_SIDE);
+			AsymmetricEquipsSystem.AddSpecialItem(itemId, AsymmetricEquipsSystem.LEFT_SIDE);
 		}
 	}
 
@@ -66,12 +66,7 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 		}
 
 		int dye = dyeItem.dye;
-		bool onCorrectSide = AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(armorItem, Player);
-		Player.direction = -Player.direction;
-		bool onWrongSide = AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(armorItem, Player);
-		Player.direction = -Player.direction;
-		bool notAsymmetric = onCorrectSide && onWrongSide;
-
+		AsymmetricEquipsSystem.GetSideInfo(armorItem, Player, out bool notAsymmetric, out bool correctSide, out _);
 		if (notAsymmetric)
 		{
 			if (birdFrontNpcId != -1 && cBirdFront == 0)
@@ -85,7 +80,7 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 		}
 		else
 		{
-			if (onCorrectSide) // BACK SIDE: Bird is on left side when facing right or on right side when facing left
+			if (correctSide) // BACK SIDE: Bird is on left side when facing right or on right side when facing left
 			{
 				cBird = dye;
 			}
@@ -103,12 +98,7 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 			return;
 		}
 
-		bool onCorrectSide = AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(item, Player);
-		Player.direction = -Player.direction;
-		bool onWrongSide = AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(item, Player);
-		Player.direction = -Player.direction;
-		bool notAsymmetric = onCorrectSide && onWrongSide;
-
+		AsymmetricEquipsSystem.GetSideInfo(item, Player, out bool notAsymmetric, out bool correctSide, out _);
 		if (notAsymmetric)
 		{
 			if (birdFrontNpcId == -1)
@@ -122,7 +112,7 @@ public sealed class ShoulderBirdPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 		}
 		else
 		{
-			if (onCorrectSide) // BACK SIDE: Bird is on left side when facing right or on right side when facing left
+			if (correctSide) // BACK SIDE: Bird is on left side when facing right or on right side when facing left
 			{
 				birdNpcId = _registeredBirds[item.type];
 			}

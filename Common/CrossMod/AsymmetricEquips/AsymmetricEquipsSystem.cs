@@ -39,16 +39,25 @@ public sealed class AsymmetricEquipsSystem : ModSystem
 		}
 	}
 
-	internal static bool AsymmetricEquips_ItemOnDefaultSide(Item item, Player player)
+	internal static bool ItemOnDefaultSide(Item item, Player player)
 	{
 		return _asymmetricEquips == null || (bool)_asymmetricEquips.Call("ItemOnDefaultSide", item, player);
 	}
 
-	internal static void AsymmetricEquips_AddSpecialItem(int itemId, int side = RIGHT_SIDE)
+	internal static void AddSpecialItem(int itemId, int side = RIGHT_SIDE)
 	{
 		if (_asymmetricEquips != null)
 		{
 			_asymmetricEquips.Call("AddSpecialItem", itemId, side);
 		}
+	}
+
+	internal static void GetSideInfo(Item item, Player player, out bool notAsymmetric, out bool correctSide, out bool wrongSide)
+	{
+		correctSide = ItemOnDefaultSide(item, player);
+		player.direction = -player.direction;
+		wrongSide = ItemOnDefaultSide(item, player);
+		player.direction = -player.direction;
+		notAsymmetric = correctSide && wrongSide;
 	}
 }

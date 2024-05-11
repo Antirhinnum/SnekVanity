@@ -25,7 +25,7 @@ public sealed class LayeredAccessoriesPlayer : ModPlayer, IAddEquipSlots, IAddDy
 
 	public void UpdateEquipSlot(Item item)
 	{
-		if (!AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(item, Player))
+		if (!AsymmetricEquipsSystem.ItemOnDefaultSide(item, Player))
 		{
 			return;
 		}
@@ -38,7 +38,7 @@ public sealed class LayeredAccessoriesPlayer : ModPlayer, IAddEquipSlots, IAddDy
 
 	public void UpdateDyeSlots(Item armorItem, Item dyeItem)
 	{
-		if (dyeItem.dye == 0 || !AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(armorItem, Player))
+		if (dyeItem.dye == 0 || !AsymmetricEquipsSystem.ItemOnDefaultSide(armorItem, Player))
 		{
 			return;
 		}

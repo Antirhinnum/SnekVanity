@@ -25,7 +25,7 @@ public sealed class ForcedEyeStatePlayer : ModPlayer, IAddEquipSlots
 
 	public void UpdateEquipSlot(Item item)
 	{
-		if (!AsymmetricEquipsSystem.AsymmetricEquips_ItemOnDefaultSide(item, Player))
+		if (!AsymmetricEquipsSystem.ItemOnDefaultSide(item, Player))
 		{
 			return;
 		}
