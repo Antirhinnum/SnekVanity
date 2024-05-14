@@ -1,7 +1,4 @@
 Snek's Misc. Vanity Version v{ModVersion}
 
-[list][*]Added equip textures for the following items:[list][*]Amethyst Staff[*]Topaz Staff[*]Sapphire Staff[*]Emerald Staff[*]Ruby Staff[*]Diamond Staff[*]Amber Staff[*]Frost Staff[*]Shadowbeam Staff[*]Aqua Scepter[/list]
-Equip the weapons in your social accessory slots to hold them!
-[*]Added the Walking Stick and Bowstaff, craftable from early-game materials. They can be equipped and held, just like the above magic weapons.
-[*]Added tooltips to the staffs above and all wearable birds informing players that they can be worn now.
-[*]Fixed the DIY Dye Bottle crashing the game if thrown with a hair dye inside.[/list]
+[list][*]Added equip textures for the following items:[list][*]Book[*]Water Bolt[*]Demon Scythe[*]Crystal Storm[*]Cursed Flame[*]Spell Tome[*]Magnet Sphere[*]Book of Skulls[*]Golden Shower[*]Razorblade Typhoon[*]Lunar Flare[/list]
+Equip the weapons in your social accessory slots to hold them![/list]

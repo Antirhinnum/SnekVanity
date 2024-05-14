@@ -13,7 +13,7 @@ Content Summary:
 * A dye that combines any two dyes you want it to.
 * A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 * You can now use paints and hair dyes as normal dyes.
-* You can now wear some birds on your shoulders and hold some magic staves.
+* You can now wear some birds on your shoulders and hold some magic staves and tomes.
 
 See the Workshop page for how to obtain all the items in this mod.
 

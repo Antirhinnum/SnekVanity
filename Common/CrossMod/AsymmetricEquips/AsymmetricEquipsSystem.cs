@@ -44,6 +44,14 @@ public sealed class AsymmetricEquipsSystem : ModSystem
 		return _asymmetricEquips == null || (bool)_asymmetricEquips.Call("ItemOnDefaultSide", item, player);
 	}
 
+	internal static void AddEquip(EquipType type, int equipId, int newId = -1, int side = RIGHT_SIDE)
+	{
+		if (_asymmetricEquips != null)
+		{
+			_asymmetricEquips.Call("AddEquip", type, equipId, newId, side);
+		}
+	}
+
 	internal static void AddSpecialItem(int itemId, int side = RIGHT_SIDE)
 	{
 		if (_asymmetricEquips != null)
