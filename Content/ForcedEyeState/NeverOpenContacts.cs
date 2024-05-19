@@ -1,5 +1,6 @@
 ﻿using SnekVanity.Common.CrossMod.AsymmetricEquips;
 using Terraria;
+using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
@@ -9,9 +10,10 @@ public sealed class NeverOpenContacts : ModItem, IForceEyeState, IAmAsymmetricSp
 {
 	public override void SetDefaults()
 	{
-		Item.accessory = true;
+		Item.DefaultToAccessory();
+		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(silver: 50));
 		Item.vanity = true;
-		Item.value = Item.buyPrice(silver: 50);
+		Item.hasVanityEffects = true;
 	}
 
 	PlayerEyeHelper.EyeFrame IForceEyeState.SetEyeState(Player player, PlayerEyeHelper.EyeFrame oldFrame)

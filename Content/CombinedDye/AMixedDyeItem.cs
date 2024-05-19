@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent.UI.Chat;
 using Terraria.Graphics.Shaders;
 using Terraria.Localization;
@@ -82,7 +83,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 		base.SetDefaults();
 
-		Item.value = Item.buyPrice(gold: 10);
+		Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 10));
 	}
 
 	public override bool CanRightClick()

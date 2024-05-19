@@ -13,7 +13,7 @@ public sealed class BasicArmband : ModItem, IAmAsymmetricGlove, IAmSoldByVanilla
 
 	public override void SetDefaults()
 	{
-		Item.accessory = true;
+		Item.DefaultToAccessory();
 		Item.vanity = true;
 		Item.value = Item.buyPrice(silver: 50);
 	}

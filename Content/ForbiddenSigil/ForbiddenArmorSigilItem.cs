@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Terraria;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,9 +13,9 @@ public sealed class ForbiddenArmorSigilItem : ModItem
 	public override void SetDefaults()
 	{
 		Item.DefaultToAccessory();
+		Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice(gold: 2));
 		Item.vanity = true;
 		Item.hasVanityEffects = true;
-		Item.value = Item.sellPrice(gold: 2);
 	}
 
 	public override void UpdateAccessory(Player player, bool hideVisual)

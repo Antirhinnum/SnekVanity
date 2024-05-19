@@ -15,6 +15,7 @@ public sealed class ShoulderBirdItem : GlobalItem
 	{
 		entity.accessory = true;
 		entity.vanity = true;
+		entity.hasVanityEffects = true;
 		entity.StatsModifiedBy.Add(Mod);
 	}
 

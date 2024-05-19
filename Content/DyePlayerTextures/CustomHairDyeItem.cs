@@ -1,5 +1,6 @@
 ﻿using SnekVanity.Common.ShopSelling;
 using Terraria;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,7 +13,8 @@ public sealed class CustomHairDyeItem : ModItem, IAmSoldByVanillaNPC, IDyeHair
 	public override void SetDefaults()
 	{
 		Item.DefaultToAccessory();
+		Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 5));
 		Item.vanity = true;
-		Item.value = Item.buyPrice(gold: 5);
+		Item.hasVanityEffects = true;
 	}
 }

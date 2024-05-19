@@ -1,6 +1,7 @@
 ﻿using SnekVanity.Common.CrossMod.AsymmetricEquips;
 using SnekVanity.Common.ShopSelling;
 using Terraria;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,8 +13,9 @@ public sealed class ScleraDyeItem : ModItem, IDyeEyeWhites, IAmAsymmetricSpecial
 
 	public override void SetDefaults()
 	{
-		Item.accessory = true;
+		Item.DefaultToAccessory();
+		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(silver: 50));
 		Item.vanity = true;
-		Item.value = Item.buyPrice(silver: 50);
+		Item.hasVanityEffects = true;
 	}
 }

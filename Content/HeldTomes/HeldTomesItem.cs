@@ -22,6 +22,7 @@ public sealed class HeldTomesItem : GlobalItem
 
 		entity.accessory = true;
 		entity.vanity = true;
+		entity.hasVanityEffects = true;
 		entity.StatsModifiedBy.Add(Mod);
 	}
 

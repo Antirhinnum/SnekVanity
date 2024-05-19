@@ -1,4 +1,5 @@
 ﻿using Terraria;
+using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,8 +10,9 @@ public sealed class AllPlayerTexturesDyeItem : ModItem, IDyeHeadSkin, IDyeTorsoS
 	public override void SetDefaults()
 	{
 		Item.DefaultToAccessory();
+		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 3, silver: 50));
 		Item.vanity = true;
-		Item.value = Item.buyPrice(gold: 3, silver: 50);
+		Item.hasVanityEffects = true;
 	}
 
 	public override void AddRecipes()
