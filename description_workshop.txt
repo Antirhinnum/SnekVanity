@@ -6,7 +6,7 @@ Content Summary:
 [*]A hair dye that takes on the effects of any dye used on it.
 [*]A set of contacts which can force the player's eyes open, half-closed, or closed. They can also force the opposite and never let the player's eyes reach a state.
 [*]A harness that allows you to hide your arms.
-[*]A generic bracelet.
+[*]A generic bracelet and a generic skirt.
 [*]An eye patch that can be worn with hats.
 [*]A Japanese umbrella. If you have the mod [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2581208060]Equipable Umbrellas[/url] installed, you can equip this umbrella as well.
 [*]A walking stick and a bowstaff, with both visual and functional appeal.

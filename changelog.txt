@@ -3,4 +3,5 @@ Snek's Misc. Vanity Version v{ModVersion}
 [list][*]Added equip textures for the following items:[list][*]Book[*]Water Bolt[*]Demon Scythe[*]Crystal Storm[*]Cursed Flame[*]Spell Tome[*]Magnet Sphere[*]Book of Skulls[*]Golden Shower[*]Razorblade Typhoon[*]Lunar Flare[/list]
 Equip the weapons in your social accessory slots to hold them!
 [*]Two more DIY dyes, the Vertical and Horizontal Gradient dyes. Shimmer the normal DIY dye to get them!
-[*]A useless dye, sold by the Dye Trader, for if you only want one dye in your gradient dye.[/list]
+[*]A useless dye, sold by the Dye Trader, for if you only want one dye in your gradient dye.
+[*]A simple skirt accessory.[/list]

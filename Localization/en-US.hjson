@@ -37,6 +37,11 @@ Mods: {
 				Tooltip: ""
 			}
 
+			SkirtItem: {
+				DisplayName: Skirt
+				Tooltip: ""
+			}
+
 			EyeDyeItem: {
 				DisplayName: Contact Lenses
 				Tooltip:
