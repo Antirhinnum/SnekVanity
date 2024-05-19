@@ -1,6 +1,7 @@
 ﻿using SnekVanity.Common.CrossMod.AsymmetricEquips;
 using SnekVanity.Common.ShopSelling;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,9 +18,9 @@ public sealed class AlwaysClosedContacts : ModItem, IForceEyeState, IAmAsymmetri
 		Item.value = Item.buyPrice(silver: 50);
 	}
 
-	EyeFrame IForceEyeState.SetEyeState(Player player, EyeFrame oldFrame)
+	PlayerEyeHelper.EyeFrame IForceEyeState.SetEyeState(Player player, PlayerEyeHelper.EyeFrame oldFrame)
 	{
-		return EyeFrame.EyeClosed;
+		return PlayerEyeHelper.EyeFrame.EyeClosed;
 	}
 
 	public override bool CanRightClick()

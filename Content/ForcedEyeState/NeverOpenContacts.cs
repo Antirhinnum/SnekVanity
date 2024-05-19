@@ -1,5 +1,6 @@
 ﻿using SnekVanity.Common.CrossMod.AsymmetricEquips;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace SnekVanity.Content.ForcedEyeState;
@@ -13,11 +14,11 @@ public sealed class NeverOpenContacts : ModItem, IForceEyeState, IAmAsymmetricSp
 		Item.value = Item.buyPrice(silver: 50);
 	}
 
-	EyeFrame IForceEyeState.SetEyeState(Player player, EyeFrame oldFrame)
+	PlayerEyeHelper.EyeFrame IForceEyeState.SetEyeState(Player player, PlayerEyeHelper.EyeFrame oldFrame)
 	{
 		return oldFrame switch
 		{
-			EyeFrame.EyeOpen => EyeFrame.EyeHalfClosed,
+			PlayerEyeHelper.EyeFrame.EyeOpen => PlayerEyeHelper.EyeFrame.EyeHalfClosed,
 			_ => oldFrame
 		};
 	}
