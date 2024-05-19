@@ -1,0 +1,68 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using Terraria;
+using Terraria.DataStructures;
+
+namespace SnekVanity.Content.CombinedDye;
+
+/// <summary>
+/// Draws a texture under the influence of an arbitrary dye.
+/// </summary>
+public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRenderTarget.Data>
+{
+	public readonly record struct Data
+	{
+		public Player Player { get; init; }
+		public Texture2D Texture { get; init; }
+		public int ShaderIndex { get; init; }
+		public Rectangle SourceRectangle { get; init; }
+
+		public Data(Player player, Texture2D texture, int shaderIndex, Rectangle? sourceRectangle = null)
+		{
+			Player = player;
+			Texture = texture;
+			ShaderIndex = shaderIndex;
+			SourceRectangle = PlayerDrawHelpers.GetRealHairFrameFromTexture(player, texture, sourceRectangle);
+		}
+	}
+
+	protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+	{
+		if (data.Player == null || data.Texture == null || data.ShaderIndex <= 0)
+		{
+			return;
+		}
+
+		Color color = Color.White;
+		PlayerDrawHelper.UnpackShader(data.ShaderIndex, out int localShader, out PlayerDrawHelper.ShaderConfiguration type);
+		if (type == PlayerDrawHelper.ShaderConfiguration.HairShader)
+		{
+			color = PlayerDrawHelpers.GetRawHairDyeColor(localShader, data.Player);
+		}
+
+		PrepareARenderTarget_AndListenToEvents(ref _target, device, data.Texture.Width, data.Texture.Height, RenderTargetUsage.PreserveContents);
+		device.SetRenderTarget(_target);
+		device.Clear(Color.Transparent);
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend); // Need to use Immediate so the shader works
+
+		int horizontalFrames = (int)Math.Ceiling(data.Texture.Width / (float)data.SourceRectangle.Width);
+		int verticalFrames = (int)Math.Ceiling(data.Texture.Height / (float)data.SourceRectangle.Height);
+
+		for (int i = 0; i < horizontalFrames; i++)
+		{
+			for (int j = 0; j < verticalFrames; j++)
+			{
+				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
+				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				DrawData value = new(data.Texture, position, frame, color) { shader = data.ShaderIndex };
+				PlayerDrawHelper.SetShaderForData(data.Player, data.Player.cHead, ref value);
+				value.Draw(spriteBatch);
+			}
+		}
+
+		spriteBatch.End();
+		device.SetRenderTarget(null);
+		_wasPrepared = true;
+	}
+}

@@ -1,4 +1,4 @@
-using SnekVanity.Content.CombinedDye;
+using SnekVanity.Common.CustomDyes;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
@@ -27,7 +27,7 @@ public sealed class SnekVanity : Mod
 
 		_superEarlyLoaded = true;
 
-		CombinedDyeItem.DoSuperEarlyHooks();
+		CustomDyeHooks.DoSuperEarlyHooks();
 	}
 
 	public override void Unload()

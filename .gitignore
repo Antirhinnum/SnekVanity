@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+Assets/Effects/fxcompiler.exe
+Assets/Effects/Microsoft.Xna.Framework.Content.Pipeline.dll
+Assets/Effects/Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll

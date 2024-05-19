@@ -120,17 +120,42 @@ Mods: {
 					'''
 			}
 
-			CombinedDyeItem: {
-				DisplayName: DIY Dye Bottle
-				Tooltip:
+			MixedDyeCommon: {
+				Instructions:
 					'''
-					Combines the effects of two dyes put into it
 					<right> this item with a dye in hand to add it
 					<right> this item with an empty hand to take a dye out
 					'''
 				MixingNone: Mixing: No dyes...
-				MixingOne: Mixing: [i:{0}]
-				MixingTwo: Mixing: [i:{0}] and [i:{1}]
+				MixingOne: Mixing: {0}
+				MixingTwo: Mixing: {0} and {1}
+			}
+
+			OverlaidMixedDyeItem: {
+				DisplayName: DIY Dye Bottle
+				Tooltip:
+					'''
+					Combines the effects of two dyes put into it
+					{$MixedDyeCommon.Instructions}
+					'''
+			}
+
+			VerticalGradientMixedDyeItem: {
+				DisplayName: DIY Vertical Gradient Dye Bottle
+				Tooltip:
+					'''
+					Vertically combines the effects of two dyes put into it
+					{$MixedDyeCommon.Instructions}
+					'''
+			}
+
+			HorizontalGradientMixedDyeItem: {
+				DisplayName: DIY Horizontal Gradient Dye Bottle
+				Tooltip:
+					'''
+					Horizontally combines the effects of two dyes put into it
+					{$MixedDyeCommon.Instructions}
+					'''
 			}
 
 			ForbiddenArmorSigilItem: {
@@ -184,6 +209,15 @@ Mods: {
 			WalkingStickItem: {
 				DisplayName: Walking Stick
 				Tooltip: Slightly increases acceleration
+			}
+
+			UselessDyeItem: {
+				DisplayName: Useless Dye
+				Tooltip:
+					'''
+					'A clear veneer, perhaps'
+					For use with custom gradient dyes
+					'''
 			}
 		}
 
