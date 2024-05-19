@@ -216,6 +216,37 @@ Mods: {
 				Tooltip: Slightly increases acceleration
 			}
 
+			DisplayDollMakeupItem: {
+				DisplayName: Lifelike Makeup Kit
+				Tooltip:
+					'''
+					Use to save your current player style to the kit
+					Wear to assume that appearance
+					<right> to [c/FF0000:permanently] copy the saved style to this player. [c/FF0000:Be careful!]
+					'''
+				# Newline so that the player render has vertical space to draw.
+				# Using ModItem hooks doesn't adjust the background box size
+				CurrentSavedStyleTooltip:
+					'''
+					Current Saved Style:
+					'''
+				NoSavedStyleTooltip: "{$CurrentSavedStyleTooltip} None!"
+			}
+
+			DisplayDollAccessoryStackingItem: {
+				DisplayName: Accessory Sack
+				Tooltip:
+					'''
+					Allows visually wearing multiple accessories in one slot
+					<right> this item with an accessory in hand to add it
+					<right> this item with an empty hand to take an accessory out
+					All contained accesories will be dyed the same as this item
+					[c/FF0000:Can only be equipped in vanity slots or by (wom)annequins.]
+					'''
+				ContainsTooltip: "Contains the following accessories: "
+				ContainsNothingTooltip: "{$ContainsTooltip}None!"
+			}
+
 			UselessDyeItem: {
 				DisplayName: Useless Dye
 				Tooltip:
