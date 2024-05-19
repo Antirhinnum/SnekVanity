@@ -11,16 +11,19 @@ namespace SnekVanity.Common.ShopSelling;
 /// </summary>
 public sealed class VanillaShopNPC : GlobalNPC
 {
-	private static readonly Dictionary<int, List<(IAmSoldByVanillaNPC, int)>> _soldItemsById = new();
+	private record struct SaleInfo(IAmSoldByVanillaNPC Interface, int ItemType);
+
+	private static Dictionary<int, List<SaleInfo>> _soldItemsById;
 
 	public override void Load()
 	{
-		_soldItemsById.Clear();
+		_soldItemsById = [];
 	}
 
 	public override void Unload()
 	{
-		_soldItemsById.Clear();
+		_soldItemsById?.Clear();
+		_soldItemsById = null;
 	}
 
 	public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
@@ -33,17 +36,19 @@ public sealed class VanillaShopNPC : GlobalNPC
 		foreach (ModItem item in Mod.GetContent<ModItem>().Where(m => m is IAmSoldByVanillaNPC))
 		{
 			IAmSoldByVanillaNPC sold = item as IAmSoldByVanillaNPC;
-			if (!_soldItemsById.ContainsKey(sold.NPC))
+			if (!_soldItemsById.TryGetValue(sold.NPC, out List<SaleInfo> value))
 			{
-				_soldItemsById[sold.NPC] = new();
+				value = [];
+				_soldItemsById[sold.NPC] = value;
 			}
-			_soldItemsById[sold.NPC].Add((sold, item.Type));
+
+			value.Add(new(sold, item.Type));
 		}
 	}
 
 	public override void ModifyShop(NPCShop shop)
 	{
-		if (!_soldItemsById.TryGetValue(shop.NpcType, out List<(IAmSoldByVanillaNPC, int)> soldItems))
+		if (!_soldItemsById.TryGetValue(shop.NpcType, out List<SaleInfo> soldItems))
 		{
 			return;
 		}

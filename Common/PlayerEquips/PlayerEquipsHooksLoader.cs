@@ -36,7 +36,10 @@ public sealed class PlayerEquipsHooksLoader : ILoadable
 
 		foreach (ModPlayer p in UpdateEquipSlotHook.Enumerate(self))
 		{
-			(p as IAddEquipSlots).UpdateEquipSlot(item);
+			if (p is IAddEquipSlots slots)
+			{
+				slots.UpdateEquipSlot(item);
+			}
 		}
 	}
 
@@ -49,7 +52,10 @@ public sealed class PlayerEquipsHooksLoader : ILoadable
 
 		foreach (ModPlayer p in ResetVisibleAccessoriesHook.Enumerate(self))
 		{
-			(p as IAddEquipSlots).ResetVisibleAccessories();
+			if (p is IAddEquipSlots slots)
+			{
+				slots.ResetVisibleAccessories();
+			}
 		}
 	}
 
@@ -67,7 +73,10 @@ public sealed class PlayerEquipsHooksLoader : ILoadable
 
 		foreach (ModPlayer p in UpdateDyeSlotsHook.Enumerate(self))
 		{
-			(p as IAddDyeSlots).UpdateDyeSlots(armorItem, dyeItem);
+			if (p is IAddDyeSlots dyes)
+			{
+				dyes.UpdateDyeSlots(armorItem, dyeItem);
+			}
 		}
 	}
 
@@ -80,7 +89,10 @@ public sealed class PlayerEquipsHooksLoader : ILoadable
 		// Clearing dyes happens at the start. Doing it after (or in ModPlayer.UpdateDyes) would clear dyes after they'd been set.
 		foreach (ModPlayer p in ClearDyeSlotsHook.Enumerate(self))
 		{
-			(p as IAddDyeSlots).ClearDyeSlots();
+			if (p is IAddDyeSlots dyes)
+			{
+				dyes.ClearDyeSlots();
+			}
 		}
 
 		orig(self);

@@ -16,14 +16,15 @@ public sealed class ForbiddenArmorSigilPlayerLayer : PlayerDrawLayer
 		return new AfterParent(PlayerDrawLayers.ForbiddenSetRing);
 	}
 
+	public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+	{
+		return drawInfo.drawPlayer.TryGetModPlayer(out ForbiddenArmorSigilPlayer forbiddenPlayer) && forbiddenPlayer.sigilActive;
+	}
+
 	protected override void Draw(ref PlayerDrawSet drawInfo)
 	{
 		Player player = drawInfo.drawPlayer;
 		ForbiddenArmorSigilPlayer forbiddenPlayer = player.GetModPlayer<ForbiddenArmorSigilPlayer>();
-		if (!forbiddenPlayer.sigilActive)
-		{
-			return;
-		}
 
 		if (!player.setForbidden)
 		{

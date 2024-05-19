@@ -20,7 +20,7 @@ public sealed class HideBodyPartsLayer : PlayerDrawLayer
 
 	public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
 	{
-		return drawInfo.drawPlayer.GetModPlayer<HiddenBodyPartsPlayer>().AnyHiddenBodyParts;
+		return drawInfo.drawPlayer.TryGetModPlayer(out HiddenBodyPartsPlayer hiddenPlayer) && hiddenPlayer.AnyHiddenBodyParts;
 	}
 
 	protected override void Draw(ref PlayerDrawSet drawInfo)

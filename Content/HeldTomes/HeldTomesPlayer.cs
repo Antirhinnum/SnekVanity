@@ -15,23 +15,34 @@ public sealed class HeldTomesPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 {
 	private const string _tomeAssetPathHead = "SnekVanity/Assets/Textures/HeldTome_";
 
-	internal static readonly Dictionary<int, Asset<Texture2D>> _knownTomesToAssets = new()
-	{
-		{ ItemID.Book, null },
-		{ ItemID.WaterBolt, null },
-		{ ItemID.DemonScythe, null },
-		{ ItemID.CrystalStorm, null },
-		{ ItemID.CursedFlames, null },
-		{ ItemID.SpellTome, null },
-		{ ItemID.MagnetSphere, null },
-		{ ItemID.BookofSkulls, null },
-		{ ItemID.GoldenShower, null },
-		{ ItemID.RazorbladeTyphoon, null },
-		{ ItemID.LunarFlareBook, null }
-	};
+	internal static Dictionary<int, Asset<Texture2D>> _knownTomesToAssets;
 
 	public Item heldTomeBack;
 	public int cTomeBack;
+
+	public override void Load()
+	{
+		_knownTomesToAssets = new()
+		{
+			{ ItemID.Book, null },
+			{ ItemID.WaterBolt, null },
+			{ ItemID.DemonScythe, null },
+			{ ItemID.CrystalStorm, null },
+			{ ItemID.CursedFlames, null },
+			{ ItemID.SpellTome, null },
+			{ ItemID.MagnetSphere, null },
+			{ ItemID.BookofSkulls, null },
+			{ ItemID.GoldenShower, null },
+			{ ItemID.RazorbladeTyphoon, null },
+			{ ItemID.LunarFlareBook, null }
+		};
+	}
+
+	public override void Unload()
+	{
+		_knownTomesToAssets?.Clear();
+		_knownTomesToAssets = null;
+	}
 
 	public override void SetStaticDefaults()
 	{

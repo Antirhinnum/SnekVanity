@@ -81,5 +81,6 @@ public sealed class HeldStavesItem : GlobalItem
 	}
 
 	internal static bool IsBalloonIdAHeldStave(int balloonId) => _staveItemTypeToBalloonEquipId.Values.Contains(balloonId);
+
 	internal static void AddStaveItem(Item item) => _staveItemTypeToBalloonEquipId[item.type] = item.balloonSlot;
 }
