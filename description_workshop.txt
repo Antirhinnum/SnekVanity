@@ -21,8 +21,9 @@ See the Discussions tab for how to obtain all the items in this mod.
 
 Credits:[list]
 [*]The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, equip sprites for all held staves, all sprites for the Walking Stick and Bowstaff, ideas for the Armless Harness, Shoulder Birds, held staves, Walking Stick, and Bowstaff.
+[*]Skulgan: Sprites for all the player-dyeing items, the DIY dye bottles, and the Realistic Makeup Kit, ideas for DIY Dye Bottle visuals, idea and sprites for the Wanderer's Umbrella.
 [*]Voyd: Idea for the DIY Hair Dye.
 [*]Keegerwocky: Idea for using hair dyes as armor dyes.
-[*]Skulgan: Sprites for several items, ideas for DIY Dye Bottle visuals, idea and sprites for the Wanderer's Umbrella.[/list]
+[/list]
 
 [url=https://github.com/Antirhinnum/SnekVanity]Source on GitHub[/url]
