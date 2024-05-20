@@ -27,6 +27,10 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 			SecondShaderIndex = secondShaderIndex;
 			SourceRectangle = PlayerDrawHelpers.GetRealHairFrameFromTexture(player, texture, sourceRectangle);
 		}
+
+		public readonly bool Equals(Data other) => Player == other.Player && Texture == other.Texture && FirstShaderIndex == other.FirstShaderIndex && SecondShaderIndex == other.SecondShaderIndex && SourceRectangle.Size() == other.SourceRectangle.Size();
+
+		public override readonly int GetHashCode() => HashCode.Combine(Player, Texture, FirstShaderIndex, SecondShaderIndex, SourceRectangle.Size());
 	}
 
 	private static Asset<Effect> _vericalImageGradientAsset;
@@ -79,8 +83,6 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 
 		device.Textures[1] = bottomTexture;
 		_vericalImageGradientAsset.Value.Parameters["resolution"].SetValue(topTexture.Size());
-		_vericalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(data.SourceRectangle.X, data.SourceRectangle.Y, data.SourceRectangle.Width, data.SourceRectangle.Height));
-		_vericalImageGradientAsset.Value.CurrentTechnique.Passes["VerticalImageGradientEffect"].Apply();
 
 		int horizontalFrames = (int)Math.Ceiling(data.Texture.Width / (float)data.SourceRectangle.Width);
 		int verticalFrames = (int)Math.Ceiling(data.Texture.Height / (float)data.SourceRectangle.Height);
@@ -91,6 +93,8 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 			{
 				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
 				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				_vericalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(frame.X, frame.Y, frame.Width, frame.Height));
+				_vericalImageGradientAsset.Value.CurrentTechnique.Passes["VerticalImageGradientEffect"].Apply();
 				new DrawData(topTexture, position, frame, Color.White).Draw(spriteBatch);
 			}
 		}

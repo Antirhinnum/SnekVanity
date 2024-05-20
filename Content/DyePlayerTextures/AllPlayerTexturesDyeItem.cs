@@ -10,7 +10,7 @@ public sealed class AllPlayerTexturesDyeItem : ModItem, IDyeHeadSkin, IDyeTorsoS
 	public override void SetDefaults()
 	{
 		Item.DefaultToAccessory();
-		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 3, silver: 50));
+		Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(gold: 8, silver: 50));
 		Item.vanity = true;
 		Item.hasVanityEffects = true;
 	}
@@ -22,6 +22,7 @@ public sealed class AllPlayerTexturesDyeItem : ModItem, IDyeHeadSkin, IDyeTorsoS
 			.AddIngredient<AllSkinDyeItem>()
 			.AddIngredient<EyeDyeItem>()
 			.AddIngredient<ScleraDyeItem>()
+			.AddIngredient<CustomHairDyeItem>()
 			.AddTile(TileID.DyeVat)
 			.SortAfterFirstRecipesOf(ModContent.ItemType<AllClothesDyeItem>())
 			.Register();

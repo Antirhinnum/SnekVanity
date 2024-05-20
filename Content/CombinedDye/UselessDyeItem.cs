@@ -8,7 +8,10 @@ namespace SnekVanity.Content.CombinedDye;
 
 public sealed class UselessDyeItem : ModItem, IAmSoldByVanillaNPC
 {
-	int IAmSoldByVanillaNPC.NPC { get; } = NPCID.DyeTrader;
+	int IAmSoldByVanillaNPC.NPC { get; } = NPCID.WitchDoctor;
+
+	[field: CloneByReference]
+	Condition IAmSoldByVanillaNPC.Available { get; } = Condition.Hardmode;
 
 	public override void SetDefaults()
 	{

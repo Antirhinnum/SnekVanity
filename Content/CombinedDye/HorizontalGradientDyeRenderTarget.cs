@@ -27,6 +27,10 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 			SecondShaderIndex = secondShaderIndex;
 			SourceRectangle = PlayerDrawHelpers.GetRealHairFrameFromTexture(player, texture, sourceRectangle);
 		}
+
+		public readonly bool Equals(Data other) => Player == other.Player && Texture == other.Texture && FirstShaderIndex == other.FirstShaderIndex && SecondShaderIndex == other.SecondShaderIndex && SourceRectangle.Size() == other.SourceRectangle.Size();
+
+		public override readonly int GetHashCode() => HashCode.Combine(Player, Texture, FirstShaderIndex, SecondShaderIndex, SourceRectangle.Size());
 	}
 
 	private static Asset<Effect> _horizontalImageGradientAsset;
@@ -79,8 +83,6 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 
 		device.Textures[1] = rightTexture;
 		_horizontalImageGradientAsset.Value.Parameters["resolution"].SetValue(leftTexture.Size());
-		_horizontalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(data.SourceRectangle.X, data.SourceRectangle.Y, data.SourceRectangle.Width, data.SourceRectangle.Height));
-		_horizontalImageGradientAsset.Value.CurrentTechnique.Passes["HorizontalImageGradientEffect"].Apply();
 
 		int horizontalFrames = (int)Math.Ceiling(data.Texture.Width / (float)data.SourceRectangle.Width);
 		int verticalFrames = (int)Math.Ceiling(data.Texture.Height / (float)data.SourceRectangle.Height);
@@ -91,6 +93,8 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 			{
 				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
 				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				_horizontalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(frame.X, frame.Y, frame.Width, frame.Height));
+				_horizontalImageGradientAsset.Value.CurrentTechnique.Passes["HorizontalImageGradientEffect"].Apply();
 				new DrawData(leftTexture, position, frame, Color.White).Draw(spriteBatch);
 			}
 		}

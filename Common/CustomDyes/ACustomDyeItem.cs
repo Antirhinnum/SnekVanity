@@ -81,6 +81,11 @@ public abstract class ACustomDyeItem : ModItem
 	// We just need to ensure that the packed value is never actually used as a shader index.
 	protected internal int GetItemDyeValue()
 	{
+		if (!HasAnyEffects)
+		{
+			return 0;
+		}
+
 		if (UniqueShaderIndex == -1)
 		{
 			int v = GameShaders.Armor.GetShaderIdFromItemId(Type);

@@ -226,10 +226,7 @@ Mods: {
 					'''
 				# Newline so that the player render has vertical space to draw.
 				# Using ModItem hooks doesn't adjust the background box size
-				CurrentSavedStyleTooltip:
-					'''
-					Current Saved Style:
-					'''
+				CurrentSavedStyleTooltip: Current Saved Style:
 				NoSavedStyleTooltip: "{$CurrentSavedStyleTooltip} None!"
 			}
 

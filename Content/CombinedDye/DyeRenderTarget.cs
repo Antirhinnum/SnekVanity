@@ -23,7 +23,7 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 			Player = player;
 			Texture = texture;
 			ShaderIndex = shaderIndex;
-			SourceRectangle = PlayerDrawHelpers.GetRealHairFrameFromTexture(player, texture, sourceRectangle);
+			SourceRectangle = PlayerDrawHelpers.GetRealHairFrameFromTexture(player, texture, sourceRectangle) with { X = 0, Y = 0 };
 		}
 	}
 
