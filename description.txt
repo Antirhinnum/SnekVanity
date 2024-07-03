@@ -16,11 +16,12 @@ Content Summary:
 * A bag you can put vanity accessories into to wear as many as you'd like.
 * You can now use paints and hair dyes as normal dyes.
 * You can now wear some birds on your shoulders and hold some magic staves and tomes.
+* Some swords now have sheaths.
 
 See the Workshop page for how to obtain all the items in this mod.
 
 Credits:
-- The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, equip sprites for all held staves, all sprites for the Walking Stick and Bowstaff, ideas for the Armless Harness, Shoulder Birds, held staves, Walking Stick, and Bowstaff.
+- The Microsoft Paint Wizard: Inventory sprites for the Armless Harness and Armband, equip sprites for all held staves and sheaths, all sprites for the Walking Stick and Bowstaff, ideas for the Armless Harness, Shoulder Birds, held staves, Walking Stick, Bowstaff, and sheaths.
 - Skulgan: Sprites for all the player-dyeing items, the DIY dye bottles, and the Lifelike Makeup Kit, ideas for DIY Dye Bottle visuals, idea and sprites for the Wanderer's Umbrella.
 - Voyd: Idea for the DIY Hair Dye.
 - Keegerwocky: Idea for using hair dyes as armor dyes.

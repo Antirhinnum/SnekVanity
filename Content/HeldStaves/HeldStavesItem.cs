@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SnekVanity.Common;
+using SnekVanity.Content.Sheaths;
+using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -80,7 +82,15 @@ public sealed class HeldStavesItem : GlobalItem
 		}
 	}
 
-	internal static bool IsBalloonIdAHeldStave(int balloonId) => _staveItemTypeToBalloonEquipId.Values.Contains(balloonId);
+	public override void HoldItem(Item item, Player player)
+	{
+		if (ModContent.GetInstance<ClientConfig>().ShowStavesWhenHeld && !player.ItemAnimationActive)
+		{
+			player.UpdateVisibleAccessory(0, item, modded: true);
+		}
+	}
+
+	internal static bool IsBalloonIdAHeldStave(int balloonId) => _staveItemTypeToBalloonEquipId.ContainsValue(balloonId);
 
 	internal static void AddStaveItem(Item item) => _staveItemTypeToBalloonEquipId[item.type] = item.balloonSlot;
 }

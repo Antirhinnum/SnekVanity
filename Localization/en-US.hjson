@@ -255,5 +255,26 @@ Mods: {
 		}
 
 		Projectiles.BowstaffProjectile.DisplayName: "{$Items.BowstaffItem.DisplayName}"
+
+		Configs: {
+			ClientConfig: {
+				DisplayName: Client Config
+
+				ShowStavesWhenHeld: {
+					Label: Show Staves When Held
+					Tooltip: ""
+				}
+
+				ShowTomesWhenHeld: {
+					Label: Show Tomes When Held
+					Tooltip: ""
+				}
+
+				ShowSheathsWhenHeld: {
+					Label: Show Sheaths When Held
+					Tooltip: ""
+				}
+			}
+		}
 	}
 }

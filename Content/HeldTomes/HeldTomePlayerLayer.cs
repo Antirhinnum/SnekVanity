@@ -16,7 +16,7 @@ public sealed class HeldTomePlayerLayer : PlayerDrawLayer
 
 	public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
 	{
-		return drawInfo.drawPlayer.TryGetModPlayer(out HeldTomesPlayer heldTomesPlayer) && heldTomesPlayer.ShouldDrawTome;
+		return drawInfo.drawPlayer.TryGetModPlayer(out HeldTomesPlayer heldTomesPlayer) && heldTomesPlayer.ShouldDrawTome && heldTomesPlayer.HasValidTome;
 	}
 
 	private static Vector2 GetCompositeOffset_BackArm(ref PlayerDrawSet drawInfo) => new Vector2(6f, 2f) * new Vector2((!drawInfo.playerEffect.HasFlag(SpriteEffects.FlipHorizontally)).ToDirectionInt(), (!drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically)).ToDirectionInt());

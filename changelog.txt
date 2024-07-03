@@ -1,11 +1,5 @@
 Snek's Misc. Vanity Version v{ModVersion}
 
-[list][*]Added equip textures for the following items:[list][*]Book[*]Water Bolt[*]Demon Scythe[*]Crystal Storm[*]Cursed Flame[*]Spell Tome[*]Magnet Sphere[*]Book of Skulls[*]Golden Shower[*]Razorblade Typhoon[*]Lunar Flare[/list]
+[list][*]Added equip textures for the following items:[list][*]Katana[*]Muramasa[*]Cobalt Sword[*]Candy Cane Sword[*]All Phaseblades and Phasesabers[/list]
 Equip the weapons in your social accessory slots to hold them!
-[*]Two more DIY dyes, the Vertical and Horizontal Gradient dyes. Shimmer the normal DIY dye to get them!
-[*]A useless dye, sold by the Witch Doctor, for if you only want one dye in your gradient dye.
-[*]The Lifelike Makeup Kit, primarily intended for allowing you to make a (Wo)mannequin look like a real player. Shimmer some Face Paint to get one!
-[*]The Accessory Sack, which allows you to (visually) wear as many accessories as you'd like. Buy one from the Clothier!
-[*]Added a simple skirt accessory.
-[*]Adjusted rarities mod-wide.
-[*]Fixed the Complete Coloring Kit Plus not including the DIY Hair Dye in its recipe.[/list]
+[*]Held weapon sprites now show if you're holding the weapon, not just if you've equipped it. This can be disabled in the config.[/list]

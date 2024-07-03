@@ -1,17 +1,16 @@
 ﻿using SnekVanity.Common;
-using SnekVanity.Content.Sheaths;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace SnekVanity.Content.HeldTomes;
+namespace SnekVanity.Content.Sheaths;
 
-public sealed class HeldTomesItem : GlobalItem
+public sealed class SheathItem : GlobalItem
 {
 	public override bool AppliesToEntity(Item entity, bool lateInstantiation)
 	{
-		return HeldTomesPlayer.IsItemTypeHeldTome(entity.type);
+		return SheathPlayer.DoesItemTypeHaveSheath(entity.type);
 	}
 
 	public override void SetDefaults(Item entity)
@@ -38,9 +37,9 @@ public sealed class HeldTomesItem : GlobalItem
 
 	public override void HoldItem(Item item, Player player)
 	{
-		if (ModContent.GetInstance<ClientConfig>().ShowTomesWhenHeld && player.TryGetModPlayer(out HeldTomesPlayer heldTomesPlayer) && !player.ItemAnimationActive)
+		if (ModContent.GetInstance<ClientConfig>().ShowSheathsWhenHeld && player.TryGetModPlayer(out SheathPlayer sheathPlayer))
 		{
-			heldTomesPlayer.UpdateEquipSlot(item);
+			sheathPlayer.UpdateEquipSlot(item);
 		}
 	}
 }

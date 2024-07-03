@@ -98,11 +98,12 @@ public sealed class HeldTomesPlayer : ModPlayer, IAddEquipSlots, IAddDyeSlots
 	internal static bool IsItemTypeHeldTome(int itemType) => _knownTomesToAssets.ContainsKey(itemType);
 
 	internal bool PlayerIsJumping => Player.bodyFrame.Y / Player.bodyFrame.Height == 5;
-	internal bool ShouldDrawTome => !PlayerIsJumping && !Player.compositeBackArm.enabled && Player.balloon <= 0 && Player.balloonFront <= 0 && heldTomeBack != null && _knownTomesToAssets.TryGetValue(heldTomeBack.type, out var asset) && asset != null;
+	internal bool ShouldDrawTome => !PlayerIsJumping && !Player.compositeBackArm.enabled && Player.balloon <= 0 && Player.balloonFront <= 0;
+	internal bool HasValidTome => heldTomeBack != null && _knownTomesToAssets.TryGetValue(heldTomeBack.type, out var asset) && asset != null;
 
 	public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
 	{
-		if (ShouldDrawTome)
+		if (ShouldDrawTome && HasValidTome)
 		{
 			// When standing still or using an item, make the player's arm stick out a bit to hold the tome.
 			int bodyFrameIndex = Player.bodyFrame.Y / Player.bodyFrame.Height;
