@@ -5,72 +5,99 @@ using Terraria.ModLoader;
 
 namespace SnekVanity.Common.CustomDyes;
 
-public sealed class CustomDyeHandler : ILoadable
+public sealed class CustomDyeHandler : ModSystem
 {
 	private static int _nextIndex;
 	private static bool _canCacheDatas = false;
-	internal static List<ACustomDyeItem> cachedDatas;
+	private static readonly List<ACustomDyeItem> _cachedDatas = [];
+	private static readonly List<ACustomDyeItem> _dyesToCache = [];
+	private static readonly List<ACustomDyeItem> _dyesToUncache = [];
 
-	public void Load(Mod mod)
+	public override void Load()
 	{
-		cachedDatas = [];
 		_canCacheDatas = true;
 	}
 
-	public void Unload()
+	public override void Unload()
 	{
 		_canCacheDatas = false;
-		cachedDatas?.Clear();
-		cachedDatas = null;
+		_cachedDatas.Clear();
+		_dyesToCache.Clear();
+		_dyesToUncache.Clear();
 	}
 
-	public static void CacheItem(ACustomDyeItem item)
+	public override void PreUpdatePlayers()
 	{
 		if (!_canCacheDatas)
 		{
 			return;
 		}
 
-		if ((item.Item?.IsAir ?? true) || !item.HasAnyEffects)
+		lock (_cachedDatas)
 		{
-			UncacheItem(item);
+			if (_dyesToCache?.Count > 0)
+			{
+				_cachedDatas.AddRange(_dyesToCache);
+				_dyesToCache.Clear();
+			}
+
+			if (_dyesToUncache?.Count > 0)
+			{
+				foreach (ACustomDyeItem dyeItem in _dyesToUncache)
+				{
+					_cachedDatas.Remove(dyeItem);
+				}
+				_dyesToUncache.Clear();
+			}
+		}
+	}
+
+	public static void CacheItem(ACustomDyeItem dyeItem)
+	{
+		if (!_canCacheDatas)
+		{
 			return;
 		}
 
-		cachedDatas ??= [];
-
-		if (item.cachedDataIndex > 0)
+		if ((dyeItem.Item?.IsAir ?? true) || !dyeItem.HasAnyEffects)
 		{
-			int index = cachedDatas.FindIndex(i => i.cachedDataIndex == item.cachedDataIndex);
+			UncacheItem(dyeItem);
+			return;
+		}
+
+		if (dyeItem.cachedDataIndex > 0)
+		{
+			int index = _cachedDatas.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
 			if (index != -1)
 			{
-				cachedDatas[index] = item;
-				item.Item.dye = item.GetItemDyeValue();
+				_cachedDatas[index] = dyeItem;
+				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
 				return;
 			}
 		}
-		item.cachedDataIndex = _nextIndex++;
-		cachedDatas.Add(item);
-		item.Item.dye = item.GetItemDyeValue();
+
+		dyeItem.cachedDataIndex = _nextIndex++;
+		_dyesToCache.Add(dyeItem);
+		dyeItem.Item.dye = dyeItem.GetItemDyeValue();
 	}
 
-	internal static void UncacheItem(ACustomDyeItem item)
+	internal static void UncacheItem(ACustomDyeItem dyeItem)
 	{
-		cachedDatas?.Remove(item);
+		_dyesToUncache.Add(dyeItem);
 	}
 
-	public static bool TryGetDyeFromShaderIndex(int shader, [NotNullWhen(true)] out ACustomDyeItem dye)
+	public static bool TryGetDyeFromShaderIndex(int shader, [NotNullWhen(true)] out ACustomDyeItem dyeItem)
 	{
-		if (cachedDatas == null)
+		if (_cachedDatas == null)
 		{
-			dye = null;
+			dyeItem = null;
 			return false;
 		}
 
 		int supposedShaderIndex = shader >> 16;
 		int cachedIndex = shader & 0xFFFF;
 
-		dye = cachedDatas.FirstOrDefault(i => i.cachedDataIndex == cachedIndex);
-		return dye != null && supposedShaderIndex == dye.UniqueShaderIndex;
+		dyeItem = _cachedDatas.FirstOrDefault(i => i.cachedDataIndex == cachedIndex);
+		return dyeItem != null && supposedShaderIndex == dyeItem.UniqueShaderIndex;
 	}
 }

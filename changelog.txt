@@ -2,4 +2,5 @@ Snek's Misc. Vanity Version v{ModVersion}
 
 [list][*]Added equip textures for the following items:[list][*]Katana[*]Muramasa[*]Cobalt Sword[*]Candy Cane Sword[*]All Phaseblades and Phasesabers[/list]
 Equip the weapons in your social accessory slots to hold them!
-[*]Held weapon sprites now show if you're holding the weapon, not just if you've equipped it. This can be disabled in the config.[/list]
+[*]Held weapon sprites now show if you're holding the weapon, not just if you've equipped it. This can be disabled in the config.
+[*](Hopefully) fixed a rare crash associated with DIY dyes.[/list]
