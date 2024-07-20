@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace SnekVanity.Common.CustomDyes;
@@ -15,7 +16,18 @@ public sealed class CustomDyeHandler : ModSystem
 
 	public override void Load()
 	{
+		On_Player.UpdateItemDye += CacheCustomDyes;
 		_canCacheDatas = true;
+	}
+
+	private static void CacheCustomDyes(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
+	{
+		if (dyeItem.ModItem is ACustomDyeItem customDyeItem)
+		{
+			CacheItem(customDyeItem);
+		}
+
+		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
 	}
 
 	public override void Unload()
@@ -59,7 +71,7 @@ public sealed class CustomDyeHandler : ModSystem
 			return;
 		}
 
-		if ((dyeItem.Item?.IsAir ?? true) || !dyeItem.HasAnyEffects)
+		if (dyeItem.Item is null || dyeItem.Item.IsAir || !dyeItem.HasAnyEffects)
 		{
 			UncacheItem(dyeItem);
 			return;
@@ -71,6 +83,14 @@ public sealed class CustomDyeHandler : ModSystem
 			if (index != -1)
 			{
 				_cachedDatas[index] = dyeItem;
+				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
+				return;
+			}
+
+			index = _dyesToCache.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
+			if (index != -1)
+			{
+				_dyesToCache[index] = dyeItem;
 				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
 				return;
 			}
