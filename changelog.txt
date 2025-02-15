@@ -3,5 +3,6 @@ Snek's Misc. Vanity Version v{ModVersion}
 [list][*]Added equip textures for the following items:[list][*]Katana[*]Muramasa[*]Cobalt Sword[*]Candy Cane Sword[*]All Phaseblades and Phasesabers[/list]
 Equip the weapons in your social accessory slots to hold them!
 [*]Held weapon sprites now show if you're holding the weapon, not just if you've equipped it. This can be disabled in the config.
+[*]Resprited vanilla's quiver equips and added a new equip for the Endless Quiver.
 [*](Hopefully) fixed a rare crash associated with DIY dyes.
-[*]Resprited vanilla's quiver equips and added a new equip for the Endless Quiver.[/list]
+[*]Fixed an overzealous fix for some starnge hair dye logic making the DIY Hair Dye not work properly sometimes (e.g., wearing a small asymmetric head equip when using the "Asymmetric Equipment" mod).[/list]
