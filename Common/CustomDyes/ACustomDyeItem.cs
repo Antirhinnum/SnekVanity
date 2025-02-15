@@ -35,12 +35,12 @@ public abstract class ACustomDyeItem : ModItem
 
 	public ACustomDyeItem()
 	{
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
 	}
 
 	~ACustomDyeItem()
 	{
-		CustomDyeHandler.UncacheItem(this);
+		UncacheSelf();
 	}
 
 	public override void Unload()
@@ -62,7 +62,7 @@ public abstract class ACustomDyeItem : ModItem
 		Item.CloneDefaults(ItemID.RedDye);
 		Item.maxStack = 1;
 		Item.dye = GetItemDyeValue();
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
 	}
 
 	/// <summary>
@@ -110,4 +110,20 @@ public abstract class ACustomDyeItem : ModItem
 	/// <param name="associatedPlayer">The <see cref="Player"/> associated with this drawing.</param>
 	/// <param name="sourceRectangle">The frame of the texture being drawn.</param>
 	public abstract void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player associatedPlayer, Rectangle? sourceRectangle = null);
+
+	/// <summary>
+	/// Caches this dye so that it works. If you hold onto any <see cref="Item"/> references, override this method (remember to call base!) and cache those items if they're also <see cref="ACustomDyeItem"/>s.
+	/// </summary>
+	public virtual void CacheSelf()
+	{
+		CustomDyeHandler.CacheItem(this);
+	}
+
+	/// <summary>
+	/// Uncaches this dye. If you hold onto any <see cref="Item"/> references, override this method (remember to call base!) and uncache those items if they're also <see cref="ACustomDyeItem"/>s.
+	/// </summary>
+	public virtual void UncacheSelf()
+	{
+		CustomDyeHandler.UncacheItem(this);
+	}
 }

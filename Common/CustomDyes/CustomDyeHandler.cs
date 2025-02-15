@@ -79,20 +79,23 @@ public sealed class CustomDyeHandler : ModSystem
 
 		if (dyeItem.cachedDataIndex > 0)
 		{
-			int index = _cachedDatas.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
-			if (index != -1)
+			lock (_cachedDatas)
 			{
-				_cachedDatas[index] = dyeItem;
-				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
-				return;
-			}
+				int index = _cachedDatas.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
+				if (index != -1)
+				{
+					_cachedDatas[index] = dyeItem;
+					dyeItem.Item.dye = dyeItem.GetItemDyeValue();
+					return;
+				}
 
-			index = _dyesToCache.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
-			if (index != -1)
-			{
-				_dyesToCache[index] = dyeItem;
-				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
-				return;
+				index = _dyesToCache.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
+				if (index != -1)
+				{
+					_dyesToCache[index] = dyeItem;
+					dyeItem.Item.dye = dyeItem.GetItemDyeValue();
+					return;
+				}
 			}
 		}
 
@@ -108,16 +111,19 @@ public sealed class CustomDyeHandler : ModSystem
 
 	public static bool TryGetDyeFromShaderIndex(int shader, [NotNullWhen(true)] out ACustomDyeItem dyeItem)
 	{
-		if (_cachedDatas == null)
+		lock (_cachedDatas)
 		{
-			dyeItem = null;
-			return false;
+			if (_cachedDatas == null)
+			{
+				dyeItem = null;
+				return false;
+			}
+
+			int supposedShaderIndex = shader >> 16;
+			int cachedIndex = shader & 0xFFFF;
+
+			dyeItem = _cachedDatas.FirstOrDefault(i => i.cachedDataIndex == cachedIndex);
+			return dyeItem != null && supposedShaderIndex == dyeItem.UniqueShaderIndex;
 		}
-
-		int supposedShaderIndex = shader >> 16;
-		int cachedIndex = shader & 0xFFFF;
-
-		dyeItem = _cachedDatas.FirstOrDefault(i => i.cachedDataIndex == cachedIndex);
-		return dyeItem != null && supposedShaderIndex == dyeItem.UniqueShaderIndex;
 	}
 }

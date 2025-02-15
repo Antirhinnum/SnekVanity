@@ -55,7 +55,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		if (dye1 != null && self.ModItem is AMixedDyeItem mixedAfter)
 		{
 			(mixedAfter.firstDyeItem, mixedAfter.secondDyeItem) = (dye1, dye2);
-			CustomDyeHandler.CacheItem(mixedAfter);
+			mixedAfter.CacheSelf();
 		}
 	}
 
@@ -82,6 +82,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		secondDyeItem = new(0);
 
 		base.SetDefaults();
+		CacheSelf();
 
 		Item.SetShopValues(ItemRarityColor.Green2, Item.buyPrice(gold: 10));
 	}
@@ -105,7 +106,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			}
 		}
 		else if ((CanAcceptUselessDye && Main.mouseItem?.ModItem is UselessDyeItem) // Accept a useless dye if allowed
-			|| (Main.mouseItem?.dye > 0 && Main.mouseItem.ModItem is not AMixedDyeItem)) // No recursion, the system can't handle it.
+			|| (Main.mouseItem?.dye > 0))
 		{
 			if (firstDyeItem == null || firstDyeItem.IsAir)
 			{
@@ -117,7 +118,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			}
 		}
 
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
 	}
 
 	// Needed so right-clicking doesn't destroy the item.
@@ -241,7 +242,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		AMixedDyeItem newItem = base.Clone(newEntity) as AMixedDyeItem;
 		newItem.firstDyeItem = firstDyeItem?.Clone();
 		newItem.secondDyeItem = secondDyeItem?.Clone();
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
 		return newItem;
 	}
 
@@ -269,7 +270,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			secondDyeItem = ItemIO.Load(secondItemTag);
 		}
 
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
 	}
 
 	public override void NetSend(BinaryWriter writer)
@@ -283,6 +284,34 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		firstDyeItem = ItemIO.Receive(reader);
 		secondDyeItem = ItemIO.Receive(reader);
 
-		CustomDyeHandler.CacheItem(this);
+		CacheSelf();
+	}
+
+	public override void CacheSelf()
+	{
+		base.CacheSelf();
+
+		if (firstDyeItem?.ModItem is ACustomDyeItem firstCustomDye)
+		{
+			firstCustomDye.CacheSelf();
+		}
+		if (secondDyeItem?.ModItem is ACustomDyeItem secondCustomDye)
+		{
+			secondCustomDye.CacheSelf();
+		}
+	}
+
+	public override void UncacheSelf()
+	{
+		base.UncacheSelf();
+
+		if (firstDyeItem?.ModItem is ACustomDyeItem firstCustomDye)
+		{
+			firstCustomDye.UncacheSelf();
+		}
+		if (secondDyeItem?.ModItem is ACustomDyeItem secondCustomDye)
+		{
+			secondCustomDye.UncacheSelf();
+		}
 	}
 }

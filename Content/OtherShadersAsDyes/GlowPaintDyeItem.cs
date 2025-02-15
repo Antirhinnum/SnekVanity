@@ -29,11 +29,13 @@ public sealed class GlowPaintDyeItem : ACustomDyeItem
 			return;
 		}
 
-		foreach (DrawData data in glowPaintDyePlayer.fullbrightDrawData)
+		for (int i = 0; i < glowPaintDyePlayer.fullbrightDrawData.Count; i++)
 		{
-			if (data.texture == texture && data.sourceRect == sourceRectangle)
+			DrawData data = glowPaintDyePlayer.fullbrightDrawData[i];
+			if (data.texture.Bounds == texture.Bounds && data.sourceRect == sourceRectangle)
 			{
 				color = data.color;
+				glowPaintDyePlayer.fullbrightDrawData.RemoveAt(i);
 				break;
 			}
 		}

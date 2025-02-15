@@ -69,7 +69,7 @@ internal static class CustomDyeHooks
 		ModifyDrawData(ref texture, ref color, ref Main.CurrentDrawnEntityShader, suppliedPlayer, sourceRectangle);
 	}
 
-	private static void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player player, Rectangle? sourceRectangle)
+	internal static void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player player, Rectangle? sourceRectangle)
 	{
 		if (!CustomDyeHandler.TryGetDyeFromShaderIndex(shader, out ACustomDyeItem customDye))
 		{
@@ -84,5 +84,8 @@ internal static class CustomDyeHooks
 
 		shader = customDye.UniqueShaderIndex;
 		customDye.ModifyDrawData(ref texture, ref color, ref shader, player, sourceRectangle);
+
+		// If the shader has been changed to a custom dye, handle it as well.
+		ModifyDrawData(ref texture, ref color, ref shader, player, sourceRectangle);
 	}
 }
