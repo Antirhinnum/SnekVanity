@@ -252,6 +252,21 @@ Mods: {
 					For use with custom gradient dyes
 					'''
 			}
+
+			EchoCoatingDyeItem: {
+				DisplayName: "{$ItemName.EchoCoating} (Dye)"
+				Tooltip: Renders dyed items only visible with Echo Sight
+			}
+
+			EchoCoatingAlwaysDyeItem: {
+				DisplayName: Potent {$ItemName.EchoCoating} (Dye)
+				Tooltip: Renders dyed items invisible, even to Echo Sight
+			}
+
+			GlowPaintDyeItem: {
+				DisplayName: "{$ItemName.GlowPaint} (Dye)"
+				Tooltip: Fully illuminates the dyed object
+			}
 		}
 
 		Projectiles.BowstaffProjectile.DisplayName: "{$Items.BowstaffItem.DisplayName}"

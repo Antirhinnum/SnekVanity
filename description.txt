@@ -14,7 +14,7 @@ Content Summary:
 * A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 * A special makeup kit that allows you to make mannequins look real.
 * A bag you can put vanity accessories into to wear as many as you'd like.
-* You can now use paints and hair dyes as normal dyes.
+* You can now use paints, hair dyes, and coatings as normal dyes.
 * You can now wear some birds on your shoulders and hold some magic staves and tomes.
 * Some swords now have sheaths.
 * All vanilla quivers have been resprited and an equip spirte has been added for the Endless Quiver.
