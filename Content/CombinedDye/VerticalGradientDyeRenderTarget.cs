@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using SnekVanity.Content.CombinedDye;
 using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace SnekVanity.Content.GradientDye;
+namespace SnekVanity.Content.CombinedDye;
 
 public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<VerticalGradientDyeRenderTarget, VerticalGradientDyeRenderTarget.Data>
 {
@@ -51,7 +50,7 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 
 	protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
 	{
-		if (data.Player == null || data.Texture == null || (data.FirstShaderIndex <= 0 && data.SecondShaderIndex <= 0))
+		if (data.Player == null || data.Texture == null || data.FirstShaderIndex <= 0 && data.SecondShaderIndex <= 0)
 		{
 			return;
 		}

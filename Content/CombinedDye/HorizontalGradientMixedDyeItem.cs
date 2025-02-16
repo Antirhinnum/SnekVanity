@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SnekVanity.Common.ShopSelling;
-using SnekVanity.Content.GradientDye;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
