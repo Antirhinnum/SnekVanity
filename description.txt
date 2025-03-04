@@ -10,7 +10,7 @@ Content Summary:
 * An eye patch that can be worn with hats.
 * A Japanese umbrella. If you have the mod "Equipable Umbrellas" installed, you can equip this umbrella as well.
 * A walking stick and a bowstaff, with both visual and functional appeal.
-* Three DIY dyes, allowing you to combine any two dyes.
+* Three DIY dyes, allowing you to combine dyes.
 * A vanity accessory version of the Forbidden armor set's sigil that's dyed independently from the player's body armor.
 * A special makeup kit that allows you to make mannequins look real.
 * A bag you can put vanity accessories into to wear as many as you'd like.

@@ -16,6 +16,7 @@ public sealed class OverlaidMixedDyeItem : AMixedDyeItem, IAmSoldByVanillaNPC
 	int IAmSoldByVanillaNPC.NPC { get; } = NPCID.WitchDoctor;
 
 	protected override bool CanAcceptUselessDye => false;
+	protected override int MaxDyesAllowed => 2;
 
 	public override void SetStaticDefaults()
 	{
@@ -26,7 +27,9 @@ public sealed class OverlaidMixedDyeItem : AMixedDyeItem, IAmSoldByVanillaNPC
 
 	public override void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player associatedPlayer, Rectangle? sourceRectangle)
 	{
-		if ((secondDyeItem?.dye > 0) == true)
+		Item firstDyeItem = dyeItems[0];
+		Item secondDyeItem = dyeItems[1];
+		if (secondDyeItem?.dye > 0)
 		{
 			var target = DyeRenderTarget.GetAndRequestTargetInstance(new(associatedPlayer, texture, firstDyeItem.dye, sourceRectangle));
 			if (target.IsReady)
@@ -40,7 +43,7 @@ public sealed class OverlaidMixedDyeItem : AMixedDyeItem, IAmSoldByVanillaNPC
 				color = PlayerDrawHelpers.GetRawHairDyeColor(secondDyeItem.hairDye, associatedPlayer, color);
 			}
 		}
-		else if ((firstDyeItem?.dye > 0) == true)
+		else if (firstDyeItem?.dye > 0)
 		{
 			shader = firstDyeItem.dye;
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SnekVanity.Common.ShopSelling;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,7 +15,6 @@ public sealed class HorizontalGradientMixedDyeItem : AMixedDyeItem, IAmSoldByVan
 
 	int IAmSoldByVanillaNPC.NPC { get; } = NPCID.WitchDoctor;
 
-	public override bool HasAnyEffects => (firstDyeItem?.dye > 0) || (secondDyeItem?.dye > 0);
 	protected override string BottleFluidTexture => Texture.Replace(Name, nameof(OverlaidMixedDyeItem)) + "_Fluid";
 
 	public override void SetStaticDefaults()
@@ -26,14 +26,12 @@ public sealed class HorizontalGradientMixedDyeItem : AMixedDyeItem, IAmSoldByVan
 
 	public override void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player associatedPlayer, Rectangle? sourceRectangle = null)
 	{
-		int firstDye = firstDyeItem?.dye ?? -1;
-		int secondDye = secondDyeItem?.dye ?? -1;
-		if (firstDye <= 0 && secondDye <= 0)
-		{
-			return;
-		}
-
-		var target = HorizontalGradientDyeRenderTarget.GetAndRequestTargetInstance(new(associatedPlayer, texture, firstDyeItem?.dye ?? 0, secondDyeItem?.dye ?? 0, sourceRectangle));
+		ACachedRenderTarget<HorizontalGradientDyeRenderTarget, HorizontalGradientDyeRenderTarget.Data> target =
+			HorizontalGradientDyeRenderTarget.GetAndRequestTargetInstance(new(
+				associatedPlayer,
+				texture,
+				sourceRectangle,
+				shaderIndices: dyeItems.Take(MaxDyes).Where(ItemIsValid).Select(i => i.dye).ToArray()));
 		if (target.IsReady)
 		{
 			texture = target.GetTarget();

@@ -2,13 +2,16 @@
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using SnekVanity.Common.CustomDyes;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.UI.Chat;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -16,20 +19,24 @@ using Terraria.ModLoader.IO;
 namespace SnekVanity.Content.CombinedDye;
 
 /// <summary>
-/// A dye that mixes two other dyes in some fashion.
+/// A dye that mixes up to four other dyes in some fashion.
 /// </summary>
 public abstract class AMixedDyeItem : ACustomDyeItem
 {
 	private static Dictionary<int, (Asset<Texture2D> Bottle, Asset<Texture2D> Fluid)> _assetsByType;
-	private static TooltipLine _noDyesLineCache;
+	private static TooltipLine _noDyesLineCache, _showDyeNamesLineCache;
 	private static bool _hooked;
 
-	protected Item firstDyeItem, secondDyeItem;
+	protected const int MAX_DYES_LIMIT = 4;
+	protected Item[] dyeItems = new Item[MAX_DYES_LIMIT];
 
-	public override bool HasAnyEffects => firstDyeItem?.dye > 0;
+	protected override bool CloneNewInstances => true;
+	public override bool HasAnyEffects => dyeItems?.Any(ItemIsValidDye) ?? false;
 	protected virtual string EmptyBottleTexture => Texture + "_Bottle";
 	protected virtual string BottleFluidTexture => Texture + "_Fluid";
 	protected virtual bool CanAcceptUselessDye => true;
+	protected virtual int MaxDyesAllowed => MAX_DYES_LIMIT;
+	protected int MaxDyes => Math.Min(MAX_DYES_LIMIT, MaxDyesAllowed);
 
 	public override void Load()
 	{
@@ -40,21 +47,24 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		}
 	}
 
+	protected static bool ItemIsValidDye(Item item) => ItemIsValid(item) && item.dye > 0;
+
+	protected static bool ItemIsValid(Item item) => item != null && !item.IsAir;
+
 	// Preserve contained dyes across shimmering, since the existing mixed dyes can all be shimmered into each other.
 	private static void PreserveDyesAcrossShimmer(On_Item.orig_GetShimmered orig, Item self)
 	{
-		Item dye1 = null;
-		Item dye2 = null;
+		Item[] dyes = null;
 		if (self.ModItem is AMixedDyeItem mixedBefore)
 		{
-			(dye1, dye2) = (mixedBefore.firstDyeItem, mixedBefore.secondDyeItem);
+			dyes = mixedBefore.dyeItems;
 		}
 
 		orig(self);
 
-		if (dye1 != null && self.ModItem is AMixedDyeItem mixedAfter)
+		if (dyes != null && self.ModItem is AMixedDyeItem mixedAfter)
 		{
-			(mixedAfter.firstDyeItem, mixedAfter.secondDyeItem) = (dye1, dye2);
+			mixedAfter.dyeItems = dyes;
 			mixedAfter.CacheSelf();
 		}
 	}
@@ -78,8 +88,12 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 	public override void SetDefaults()
 	{
-		firstDyeItem = new(0);
-		secondDyeItem = new(0);
+		dyeItems = new Item[MAX_DYES_LIMIT];
+		for (int i = 0; i < MAX_DYES_LIMIT; i++)
+		{
+			dyeItems[i] = new Item(ItemID.None);
+			dyeItems[i].TurnToAir();
+		}
 
 		base.SetDefaults();
 		CacheSelf();
@@ -94,27 +108,37 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 	public override void RightClick(Player player)
 	{
-		if (Main.mouseItem == null || Main.mouseItem.IsAir)
+		if (dyeItems == null)
 		{
-			if (secondDyeItem != null && !secondDyeItem.IsAir)
+			dyeItems = new Item[MAX_DYES_LIMIT];
+			for (int i = 0; i < MAX_DYES_LIMIT; i++)
 			{
-				Main.mouseItem = ItemLoader.TransferWithLimit(secondDyeItem, secondDyeItem.maxStack);
-			}
-			else if (firstDyeItem != null && !firstDyeItem.IsAir)
-			{
-				Main.mouseItem = ItemLoader.TransferWithLimit(firstDyeItem, firstDyeItem.maxStack);
+				dyeItems[i] = new Item(ItemID.None);
 			}
 		}
-		else if ((CanAcceptUselessDye && Main.mouseItem?.ModItem is UselessDyeItem) // Accept a useless dye if allowed
-			|| (Main.mouseItem?.dye > 0))
+
+		bool uselessDyeCheck = CanAcceptUselessDye && Main.mouseItem?.ModItem is UselessDyeItem;
+		if (!ItemIsValid(Main.mouseItem))
 		{
-			if (firstDyeItem == null || firstDyeItem.IsAir)
+			for (int i = MAX_DYES_LIMIT - 1; i >= 0; i--)
 			{
-				firstDyeItem = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
+				if (ItemIsValid(dyeItems[i]))
+				{
+					Main.mouseItem = ItemLoader.TransferWithLimit(dyeItems[i], dyeItems[i].maxStack);
+					break;
+				}
 			}
-			else if (secondDyeItem == null || secondDyeItem.IsAir)
+		}
+		else if (uselessDyeCheck || (Main.mouseItem?.dye > 0))
+		{
+			// Only allow insertion up to the limited amount
+			for (int i = 0; i < MaxDyes; i++)
 			{
-				secondDyeItem = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
+				if (!ItemIsValid(dyeItems[i]))
+				{
+					dyeItems[i] = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
+					break;
+				}
 			}
 		}
 
@@ -212,62 +236,77 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			return;
 		}
 
-		TooltipLine toInsert;
-		bool firstItemPresent = firstDyeItem != null && !firstDyeItem.IsAir;
-		bool secondItemPresent = secondDyeItem != null && !secondDyeItem.IsAir;
-		if (firstItemPresent && secondItemPresent)
+		IEnumerable<Item> itemsToList = dyeItems?.TakeWhile(ItemIsValid);
+		if (!itemsToList.Any())
 		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", Language.GetText("Mods.SnekVanity.Items.MixedDyeCommon.MixingTwo").Format(ItemTagHandler.GenerateTag(firstDyeItem), ItemTagHandler.GenerateTag(secondDyeItem)));
-		}
-		else if (firstItemPresent)
-		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", Language.GetText("Mods.SnekVanity.Items.MixedDyeCommon.MixingOne").Format(ItemTagHandler.GenerateTag(firstDyeItem)));
-		}
-		else if (secondItemPresent)
-		{
-			toInsert = new(Mod, $"{Mod.Name}: {Name}DyeInfo", Language.GetText("Mods.SnekVanity.Items.MixedDyeCommon.MixingOne").Format(ItemTagHandler.GenerateTag(secondDyeItem)));
+			_noDyesLineCache ??= new TooltipLine(Mod, $"{Mod.Name}: {Name}DyeInfo", Language.GetTextValue("Mods.SnekVanity.Items.MixedDyeCommon.MixingNone"));
+			tooltips.Insert(lastTooltipIndex + 1, _noDyesLineCache);
 		}
 		else
 		{
-			_noDyesLineCache ??= new TooltipLine(Mod, $"{Mod.Name}: {Name}DyeInfo", Language.GetTextValue("Mods.SnekVanity.Items.MixedDyeCommon.MixingNone"));
-			toInsert = _noDyesLineCache;
+			string text = Language.GetTextValue("Mods.SnekVanity.Items.MixedDyeCommon.Mixing");
+			if (Main.keyState.PressingShift())
+			{
+				text += '\n' + string.Join('\n', itemsToList.Select(i => Language.GetText("Mods.SnekVanity.Items.MixedDyeCommon.MixingListItem").Format(ItemTagHandler.GenerateTag(i), Lang.GetItemName(i.type))));
+			}
+			else
+			{
+				text += ' ' + string.Join(", ", itemsToList.Select(ItemTagHandler.GenerateTag));
+			}
+
+			TooltipLine infoLine = new(Mod, $"{Mod.Name}: {Name}DyeInfo", text);
+			tooltips.Insert(lastTooltipIndex + 1, _noDyesLineCache);
+
+			if (!Main.keyState.PressingShift())
+			{
+				_showDyeNamesLineCache ??= new TooltipLine(Mod, $"{Mod.Name}: {Name}Hint", Language.GetTextValue("Mods.SnekVanity.Items.MixedDyeCommon.MixingTooltipHint"));
+				tooltips.Insert(lastTooltipIndex + 2, _showDyeNamesLineCache);
+			}
 		}
 
 		// After last normal tooltip
-		tooltips.Insert(lastTooltipIndex + 1, toInsert);
 	}
 
 	public override ModItem Clone(Item newEntity)
 	{
 		AMixedDyeItem newItem = base.Clone(newEntity) as AMixedDyeItem;
-		newItem.firstDyeItem = firstDyeItem?.Clone();
-		newItem.secondDyeItem = secondDyeItem?.Clone();
+		newItem.dyeItems = new Item[MAX_DYES_LIMIT];
+		for (int i = 0; i < MAX_DYES_LIMIT; i++)
+		{
+			newItem.dyeItems[i] = dyeItems[i]?.Clone();
+		}
 		CacheSelf();
 		return newItem;
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		if (firstDyeItem != null && !firstDyeItem.IsAir)
+		IEnumerable<Item> dyesToSave = dyeItems?.TakeWhile(ItemIsValid);
+		if (dyesToSave.Any())
 		{
-			tag.Add(nameof(firstDyeItem), ItemIO.Save(firstDyeItem));
-		}
-
-		if (secondDyeItem != null && !secondDyeItem.IsAir)
-		{
-			tag.Add(nameof(secondDyeItem), ItemIO.Save(secondDyeItem));
+			tag.Add(nameof(dyeItems), dyesToSave.Select(ItemIO.Save).ToList());
 		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		if (tag.TryGet(nameof(firstDyeItem), out TagCompound firstItemTag))
+		if (tag.TryGet(nameof(dyeItems), out List<TagCompound> dyeItemsTag))
 		{
-			firstDyeItem = ItemIO.Load(firstItemTag);
+			int count = Math.Min(MAX_DYES_LIMIT, dyeItemsTag.Count);
+			for (int i = 0; i < count; i++)
+			{
+				dyeItems[i] = ItemIO.Load(dyeItemsTag[i]);
+			}
 		}
-		if (tag.TryGet(nameof(secondDyeItem), out TagCompound secondItemTag))
+
+		// Legacy
+		if (tag.TryGet("firstDyeItem", out TagCompound firstItemTag))
 		{
-			secondDyeItem = ItemIO.Load(secondItemTag);
+			dyeItems[0] = ItemIO.Load(firstItemTag);
+		}
+		if (tag.TryGet("secondDyeItem", out TagCompound secondItemTag))
+		{
+			dyeItems[1] = ItemIO.Load(secondItemTag);
 		}
 
 		CacheSelf();
@@ -275,29 +314,42 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 	public override void NetSend(BinaryWriter writer)
 	{
-		ItemIO.Send(firstDyeItem ??= new(0), writer);
-		ItemIO.Send(secondDyeItem ??= new(0), writer);
+		int count = dyeItems?.TakeWhile(ItemIsValid).Count() ?? 0;
+		writer.Write((byte)count);
+		for (int i = 0; i < count; i++)
+		{
+			ItemIO.Send(dyeItems[i], writer);
+		}
 	}
 
 	public override void NetReceive(BinaryReader reader)
 	{
-		firstDyeItem = ItemIO.Receive(reader);
-		secondDyeItem = ItemIO.Receive(reader);
-
-		CacheSelf();
+		int count = reader.ReadByte();
+		if (count > 0)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				ItemIO.Receive(dyeItems[i], reader);
+			}
+			CacheSelf();
+		}
 	}
 
 	public override void CacheSelf()
 	{
 		base.CacheSelf();
 
-		if (firstDyeItem?.ModItem is ACustomDyeItem firstCustomDye)
+		if (dyeItems == null)
 		{
-			firstCustomDye.CacheSelf();
+			return;
 		}
-		if (secondDyeItem?.ModItem is ACustomDyeItem secondCustomDye)
+
+		for (int i = 0; i < MAX_DYES_LIMIT; i++)
 		{
-			secondCustomDye.CacheSelf();
+			if (dyeItems[i]?.ModItem is ACustomDyeItem customDye)
+			{
+				customDye.CacheSelf();
+			}
 		}
 	}
 
@@ -305,13 +357,17 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 	{
 		base.UncacheSelf();
 
-		if (firstDyeItem?.ModItem is ACustomDyeItem firstCustomDye)
+		if (dyeItems == null)
 		{
-			firstCustomDye.UncacheSelf();
+			return;
 		}
-		if (secondDyeItem?.ModItem is ACustomDyeItem secondCustomDye)
+
+		for (int i = 0; i < MAX_DYES_LIMIT; i++)
 		{
-			secondCustomDye.UncacheSelf();
+			if (dyeItems[i]?.ModItem is ACustomDyeItem customDye)
+			{
+				customDye.UncacheSelf();
+			}
 		}
 	}
 }

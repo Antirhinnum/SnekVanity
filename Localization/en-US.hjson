@@ -132,8 +132,9 @@ Mods: {
 					<right> this item with an empty hand to take a dye out
 					'''
 				MixingNone: Mixing: No dyes...
-				MixingOne: Mixing: {0}
-				MixingTwo: Mixing: {0} and {1}
+				Mixing: Mixing:
+				MixingListItem: - {0} {1}
+				MixingTooltipHint: (Press SHIFT to see dye names)
 			}
 
 			OverlaidMixedDyeItem: {
@@ -149,7 +150,7 @@ Mods: {
 				DisplayName: DIY Vertical Gradient Dye Bottle
 				Tooltip:
 					'''
-					Vertically combines the effects of two dyes put into it
+					Vertically combines the effects of up to four dyes put into it
 					{$MixedDyeCommon.Instructions}
 					'''
 			}
@@ -158,7 +159,7 @@ Mods: {
 				DisplayName: DIY Horizontal Gradient Dye Bottle
 				Tooltip:
 					'''
-					Horizontally combines the effects of two dyes put into it
+					Horizontally combines the effects of up to four dyes put into it
 					{$MixedDyeCommon.Instructions}
 					'''
 			}
