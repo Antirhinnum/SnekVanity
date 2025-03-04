@@ -50,7 +50,7 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 		device.SetRenderTarget(_target);
 		device.Clear(Color.Transparent);
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend); // Need to use Immediate so the shader works
-		
+
 		int horizontalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Width / (float)data.SourceRectangle.Width));
 		int verticalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Height / (float)data.SourceRectangle.Height));
 		Vector2 realFrameSize = texture.Frame(horizontalFrames, verticalFrames).Size();

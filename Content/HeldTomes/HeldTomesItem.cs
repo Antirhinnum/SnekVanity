@@ -1,5 +1,4 @@
 ﻿using SnekVanity.Common;
-using SnekVanity.Content.Sheaths;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;

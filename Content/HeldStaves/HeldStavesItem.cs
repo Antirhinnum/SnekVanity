@@ -1,7 +1,5 @@
 ﻿using SnekVanity.Common;
-using SnekVanity.Content.Sheaths;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
