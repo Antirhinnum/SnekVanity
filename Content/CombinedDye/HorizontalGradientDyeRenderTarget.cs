@@ -50,7 +50,7 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 
 	protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
 	{
-		if (data.Player == null || data.Texture == null || data.FirstShaderIndex <= 0 && data.SecondShaderIndex <= 0)
+		if (data.Player == null || data.Texture == null)
 		{
 			return;
 		}
@@ -58,7 +58,7 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 		Texture2D leftTexture = data.Texture;
 		if (data.FirstShaderIndex > 0)
 		{
-			var leftTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.FirstShaderIndex));
+			var leftTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.FirstShaderIndex, data.SourceRectangle));
 			if (leftTarget.IsReady)
 			{
 				leftTexture = leftTarget.GetTarget();
@@ -68,7 +68,7 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 		Texture2D rightTexture = data.Texture;
 		if (data.SecondShaderIndex > 0)
 		{
-			var rightTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.SecondShaderIndex));
+			var rightTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.SecondShaderIndex, data.SourceRectangle));
 			if (rightTarget.IsReady)
 			{
 				rightTexture = rightTarget.GetTarget();
@@ -83,15 +83,16 @@ public sealed class HorizontalGradientDyeRenderTarget : ACachedRenderTarget<Hori
 		device.Textures[1] = rightTexture;
 		_horizontalImageGradientAsset.Value.Parameters["resolution"].SetValue(leftTexture.Size());
 
-		int horizontalFrames = (int)Math.Ceiling(data.Texture.Width / (float)data.SourceRectangle.Width);
-		int verticalFrames = (int)Math.Ceiling(data.Texture.Height / (float)data.SourceRectangle.Height);
+		int horizontalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Width / (float)data.SourceRectangle.Width));
+		int verticalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Height / (float)data.SourceRectangle.Height));
+		Vector2 realFrameSize = leftTexture.Frame(horizontalFrames, verticalFrames).Size();
 
 		for (int i = 0; i < horizontalFrames; i++)
 		{
 			for (int j = 0; j < verticalFrames; j++)
 			{
-				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
-				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				Vector2 position = new Vector2(i, j) * realFrameSize;
+				Rectangle frame = new((int)position.X, (int)position.Y, (int)realFrameSize.X, (int)realFrameSize.Y);
 				_horizontalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(frame.X, frame.Y, frame.Width, frame.Height));
 				_horizontalImageGradientAsset.Value.CurrentTechnique.Passes["HorizontalImageGradientEffect"].Apply();
 				new DrawData(leftTexture, position, frame, Color.White).Draw(spriteBatch);

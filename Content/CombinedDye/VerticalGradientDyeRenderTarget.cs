@@ -50,7 +50,7 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 
 	protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
 	{
-		if (data.Player == null || data.Texture == null || data.FirstShaderIndex <= 0 && data.SecondShaderIndex <= 0)
+		if (data.Player == null || data.Texture == null)
 		{
 			return;
 		}
@@ -58,7 +58,7 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 		Texture2D topTexture = data.Texture;
 		if (data.FirstShaderIndex > 0)
 		{
-			var topTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.FirstShaderIndex));
+			var topTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.FirstShaderIndex, data.SourceRectangle));
 			if (topTarget.IsReady)
 			{
 				topTexture = topTarget.GetTarget();
@@ -68,7 +68,7 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 		Texture2D bottomTexture = data.Texture;
 		if (data.SecondShaderIndex > 0)
 		{
-			var bottomTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.SecondShaderIndex));
+			var bottomTarget = DyeRenderTarget.GetAndRequestTargetInstance(new(data.Player, data.Texture, data.SecondShaderIndex, data.SourceRectangle));
 			if (bottomTarget.IsReady)
 			{
 				bottomTexture = bottomTarget.GetTarget();
@@ -83,15 +83,26 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 		device.Textures[1] = bottomTexture;
 		_vericalImageGradientAsset.Value.Parameters["resolution"].SetValue(topTexture.Size());
 
-		int horizontalFrames = (int)Math.Ceiling(data.Texture.Width / (float)data.SourceRectangle.Width);
-		int verticalFrames = (int)Math.Ceiling(data.Texture.Height / (float)data.SourceRectangle.Height);
+		int horizontalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Width / (float)data.SourceRectangle.Width));
+		int verticalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Height / (float)data.SourceRectangle.Height));
+		int frameHeight = data.SourceRectangle.Height;
+
+		// Hack because head textures are weird -- some aren't 1120px tall, and they use a source rectangle with height 52.
+		if (data.Texture.Width == 40 && data.Texture.Height >= 1118 && data.Texture.Height <= 1122)
+		{
+			verticalFrames = 20;
+			frameHeight = 56;
+		}
+
+		Vector2 realFrameSize = topTexture.Frame(horizontalFrames, verticalFrames).Size();
+		realFrameSize.Y = frameHeight;
 
 		for (int i = 0; i < horizontalFrames; i++)
 		{
 			for (int j = 0; j < verticalFrames; j++)
 			{
-				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
-				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				Vector2 position = new Vector2(i, j) * realFrameSize;
+				Rectangle frame = new((int)position.X, (int)position.Y, (int)realFrameSize.X, (int)realFrameSize.Y);
 				_vericalImageGradientAsset.Value.Parameters["sourceRectangle"].SetValue(new Vector4(frame.X, frame.Y, frame.Width, frame.Height));
 				_vericalImageGradientAsset.Value.CurrentTechnique.Passes["VerticalImageGradientEffect"].Apply();
 				new DrawData(topTexture, position, frame, Color.White).Draw(spriteBatch);

@@ -8,4 +8,5 @@ Equip the weapons in your social accessory slots to hold them!
 [*]DIY Dyes can now be included in other DIY dyes. The effects may take a few frames to fully apply.
 [*](Hopefully) fixed a rare crash associated with DIY dyes.
 [*]Fixed an overzealous fix for some starnge hair dye logic making the DIY Hair Dye not work properly sometimes (e.g., wearing a small asymmetric head equip when using the "Asymmetric Equipment" mod).
+[*](Hopefully) fixed the DIY Vertical Gradient Dye having strange effects on headgear while moving.
 [*]Added a new mod call, "GetConfigOption".[/list]

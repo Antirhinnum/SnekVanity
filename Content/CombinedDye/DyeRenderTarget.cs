@@ -30,7 +30,7 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 
 	protected override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
 	{
-		if (data.Player == null || data.Texture == null || data.ShaderIndex <= 0)
+		if (data.Player == null || data.Texture == null)
 		{
 			return;
 		}
@@ -50,16 +50,17 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 		device.SetRenderTarget(_target);
 		device.Clear(Color.Transparent);
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend); // Need to use Immediate so the shader works
-
-		int horizontalFrames = (int)Math.Ceiling(texture.Width / (float)data.SourceRectangle.Width);
-		int verticalFrames = (int)Math.Ceiling(texture.Height / (float)data.SourceRectangle.Height);
+		
+		int horizontalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Width / (float)data.SourceRectangle.Width));
+		int verticalFrames = Math.Max(1, (int)Math.Floor(data.Texture.Height / (float)data.SourceRectangle.Height));
+		Vector2 realFrameSize = texture.Frame(horizontalFrames, verticalFrames).Size();
 
 		for (int i = 0; i < horizontalFrames; i++)
 		{
 			for (int j = 0; j < verticalFrames; j++)
 			{
-				Vector2 position = new Vector2(i, j) * data.SourceRectangle.Size();
-				Rectangle frame = new(i * data.SourceRectangle.Width, j * data.SourceRectangle.Height, data.SourceRectangle.Width, data.SourceRectangle.Height);
+				Vector2 position = new Vector2(i, j) * realFrameSize;
+				Rectangle frame = new((int)position.X, (int)position.Y, (int)realFrameSize.X, (int)realFrameSize.Y);
 				DrawData value = new(texture, position, frame, color) { shader = shader };
 				PlayerDrawHelper.SetShaderForData(data.Player, data.Player.cHead, ref value);
 				value.Draw(spriteBatch);
@@ -68,6 +69,7 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 
 		spriteBatch.End();
 		device.SetRenderTarget(null);
+		_target.Tag = texture;
 		_wasPrepared = true;
 	}
 }
