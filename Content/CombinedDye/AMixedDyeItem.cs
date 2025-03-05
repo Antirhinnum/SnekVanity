@@ -129,7 +129,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 				}
 			}
 		}
-		else if (uselessDyeCheck || (Main.mouseItem?.dye > 0))
+		else if (Main.mouseItem != null && CanAcceptItem(Main.mouseItem))
 		{
 			// Only allow insertion up to the limited amount
 			for (int i = 0; i < MaxDyes; i++)
@@ -143,6 +143,16 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		}
 
 		CacheSelf();
+	}
+
+	protected virtual bool CanAcceptItem(Item dye)
+	{
+		if (dye.ModItem is UselessDyeItem && CanAcceptUselessDye)
+		{
+			return true;
+		}
+
+		return dye.dye > 0;
 	}
 
 	// Needed so right-clicking doesn't destroy the item.
@@ -255,7 +265,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			}
 
 			TooltipLine infoLine = new(Mod, $"{Mod.Name}: {Name}DyeInfo", text);
-			tooltips.Insert(lastTooltipIndex + 1, _noDyesLineCache);
+			tooltips.Insert(lastTooltipIndex + 1, infoLine);
 
 			if (!Main.keyState.PressingShift())
 			{
@@ -263,8 +273,6 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 				tooltips.Insert(lastTooltipIndex + 2, _showDyeNamesLineCache);
 			}
 		}
-
-		// After last normal tooltip
 	}
 
 	public override ModItem Clone(Item newEntity)
@@ -275,7 +283,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 		{
 			newItem.dyeItems[i] = dyeItems[i]?.Clone();
 		}
-		CacheSelf();
+		newItem.CacheSelf();
 		return newItem;
 	}
 
@@ -295,18 +303,18 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			int count = Math.Min(MAX_DYES_LIMIT, dyeItemsTag.Count);
 			for (int i = 0; i < count; i++)
 			{
-				dyeItems[i] = ItemIO.Load(dyeItemsTag[i]);
+				ItemIO.Load(dyeItems[i], dyeItemsTag[i]);
 			}
 		}
 
 		// Legacy
-		if (tag.TryGet("firstDyeItem", out TagCompound firstItemTag))
+		if (tag.TryGet("firstDyeItem", out TagCompound firstItemTag) || tag.TryGet("_firstDyeItem", out firstItemTag))
 		{
-			dyeItems[0] = ItemIO.Load(firstItemTag);
+			ItemIO.Load(dyeItems[0], firstItemTag);
 		}
-		if (tag.TryGet("secondDyeItem", out TagCompound secondItemTag))
+		if (tag.TryGet("secondDyeItem", out TagCompound secondItemTag) || tag.TryGet("_secondDyeItem", out secondItemTag))
 		{
-			dyeItems[1] = ItemIO.Load(secondItemTag);
+			ItemIO.Load(dyeItems[1], secondItemTag);
 		}
 
 		CacheSelf();

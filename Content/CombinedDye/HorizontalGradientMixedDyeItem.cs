@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SnekVanity.Common.ShopSelling;
+using SnekVanity.Content.OtherShadersAsDyes;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
@@ -22,6 +23,11 @@ public sealed class HorizontalGradientMixedDyeItem : AMixedDyeItem, IAmSoldByVan
 		base.SetStaticDefaults();
 
 		ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<OverlaidMixedDyeItem>();
+	}
+
+	protected override bool CanAcceptItem(Item dye)
+	{
+		return dye.ModItem is not GlowPaintDyeItem && base.CanAcceptItem(dye);
 	}
 
 	public override void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player associatedPlayer, Rectangle? sourceRectangle = null)

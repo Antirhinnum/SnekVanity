@@ -22,6 +22,7 @@ public abstract class ACustomDyeItem : ModItem
 	/// </summary>
 	protected internal int UniqueShaderIndex { get; private set; } = -1;
 
+	[field: CloneByReference]
 	/// <summary>
 	/// The <see cref="ArmorShaderData"/> associated with this item.
 	/// </summary>

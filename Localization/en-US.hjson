@@ -266,7 +266,12 @@ Mods: {
 
 			GlowPaintDyeItem: {
 				DisplayName: "{$ItemName.GlowPaint} (Dye)"
-				Tooltip: Fully illuminates the dyed object
+				Tooltip:
+					'''
+					Fully illuminates the dyed object
+					Does not work with DIY gradient dyes
+					For best effects, apply last using a normal DIY dye!
+					'''
 			}
 		}
 

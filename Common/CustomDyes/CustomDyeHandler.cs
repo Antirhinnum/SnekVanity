@@ -17,28 +17,11 @@ public sealed class CustomDyeHandler : ModSystem
 	public override void Load()
 	{
 		On_Player.UpdateItemDye += CacheCustomDyes;
+		Main.OnTickForThirdPartySoftwareOnly += UpdateCachedDyes;
 		_canCacheDatas = true;
 	}
 
-	private static void CacheCustomDyes(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
-	{
-		if (dyeItem.ModItem is ACustomDyeItem customDyeItem)
-		{
-			CacheItem(customDyeItem);
-		}
-
-		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
-	}
-
-	public override void Unload()
-	{
-		_canCacheDatas = false;
-		_cachedDatas.Clear();
-		_dyesToCache.Clear();
-		_dyesToUncache.Clear();
-	}
-
-	public override void PreUpdatePlayers()
+	private static void UpdateCachedDyes()
 	{
 		if (!_canCacheDatas)
 		{
@@ -62,6 +45,25 @@ public sealed class CustomDyeHandler : ModSystem
 				_dyesToUncache.Clear();
 			}
 		}
+	}
+
+	private static void CacheCustomDyes(On_Player.orig_UpdateItemDye orig, Player self, bool isNotInVanitySlot, bool isSetToHidden, Item armorItem, Item dyeItem)
+	{
+		if (dyeItem.ModItem is ACustomDyeItem customDyeItem)
+		{
+			CacheItem(customDyeItem);
+		}
+
+		orig(self, isNotInVanitySlot, isSetToHidden, armorItem, dyeItem);
+	}
+
+	public override void Unload()
+	{
+		_canCacheDatas = false;
+		_cachedDatas.Clear();
+		_dyesToCache.Clear();
+		_dyesToUncache.Clear();
+		Main.OnTickForThirdPartySoftwareOnly -= UpdateCachedDyes;
 	}
 
 	public static void CacheItem(ACustomDyeItem dyeItem)
