@@ -82,8 +82,15 @@ internal static class CustomDyeHooks
 			return;
 		}
 
+		customDye.CacheSelf();
+
+		Texture2D originalTexture = texture;
 		shader = customDye.UniqueShaderIndex;
 		customDye.ModifyDrawData(ref texture, ref color, ref shader, player, sourceRectangle);
+		if (texture != originalTexture)
+		{
+			texture.Tag = originalTexture;
+		}
 
 		// If the shader has been changed to a custom dye, handle it as well.
 		ModifyDrawData(ref texture, ref color, ref shader, player, sourceRectangle);

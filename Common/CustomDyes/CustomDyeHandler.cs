@@ -8,7 +8,6 @@ namespace SnekVanity.Common.CustomDyes;
 
 public sealed class CustomDyeHandler : ModSystem
 {
-	private static int _nextIndex;
 	private static bool _canCacheDatas = false;
 	private static readonly List<ACustomDyeItem> _cachedDatas = [];
 	private static readonly List<ACustomDyeItem> _dyesToCache = [];
@@ -73,35 +72,38 @@ public sealed class CustomDyeHandler : ModSystem
 			return;
 		}
 
-		if (dyeItem.Item is null || dyeItem.Item.IsAir || !dyeItem.HasAnyEffects)
+		if (dyeItem.UniqueShaderIndex == -1)
 		{
-			UncacheItem(dyeItem);
 			return;
 		}
 
-		if (dyeItem.cachedDataIndex > 0)
+		if (dyeItem.Item is null || dyeItem.Item.IsAir || !dyeItem.HasAnyEffects)
 		{
-			lock (_cachedDatas)
-			{
-				int index = _cachedDatas.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
-				if (index != -1)
-				{
-					_cachedDatas[index] = dyeItem;
-					dyeItem.Item.dye = dyeItem.GetItemDyeValue();
-					return;
-				}
+			// For some reason, uncaching causes dyes to stop working when shown in text snippets.
+			//UncacheItem(dyeItem);
+			return;
+		}
 
-				index = _dyesToCache.FindIndex(i => i.cachedDataIndex == dyeItem.cachedDataIndex);
-				if (index != -1)
-				{
-					_dyesToCache[index] = dyeItem;
-					dyeItem.Item.dye = dyeItem.GetItemDyeValue();
-					return;
-				}
+		ushort uniqueIndex = dyeItem.GetUniqueDyeIndex();
+		lock (_cachedDatas)
+		{
+			int index = _cachedDatas.FindIndex(i => i.UniqueShaderIndex == dyeItem.UniqueShaderIndex && i.GetUniqueDyeIndex() == uniqueIndex);
+			if (index != -1)
+			{
+				_cachedDatas[index] = dyeItem;
+				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
+				return;
+			}
+
+			index = _dyesToCache.FindIndex(i => i.UniqueShaderIndex == dyeItem.UniqueShaderIndex && i.GetUniqueDyeIndex() == uniqueIndex);
+			if (index != -1)
+			{
+				_dyesToCache[index] = dyeItem;
+				dyeItem.Item.dye = dyeItem.GetItemDyeValue();
+				return;
 			}
 		}
 
-		dyeItem.cachedDataIndex = _nextIndex++;
 		_dyesToCache.Add(dyeItem);
 		dyeItem.Item.dye = dyeItem.GetItemDyeValue();
 	}
@@ -124,8 +126,8 @@ public sealed class CustomDyeHandler : ModSystem
 			int supposedShaderIndex = shader >> 16;
 			int cachedIndex = shader & 0xFFFF;
 
-			dyeItem = _cachedDatas.FirstOrDefault(i => i.cachedDataIndex == cachedIndex);
-			return dyeItem != null && supposedShaderIndex == dyeItem.UniqueShaderIndex;
+			dyeItem = _cachedDatas.FirstOrDefault(i => i.UniqueShaderIndex == supposedShaderIndex && i.GetUniqueDyeIndex() == cachedIndex);
+			return dyeItem != null;
 		}
 	}
 }

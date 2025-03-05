@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 namespace SnekVanity.Content.CombinedDye;
 
 /// <summary>
-/// Draws a texture under the influence of an arbitrary dye.
+/// Draws a texture under the influence of an arbitrary dye. The rendered texture will have its <see cref="GraphicsResource.Tag"/> set to the original texture it was generated from.
 /// </summary>
 public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRenderTarget.Data>
 {
@@ -69,7 +69,13 @@ public sealed class DyeRenderTarget : ACachedRenderTarget<DyeRenderTarget, DyeRe
 
 		spriteBatch.End();
 		device.SetRenderTarget(null);
-		_target.Tag = texture;
+
+		Texture2D originalTexture = data.Texture;
+		while (originalTexture.Tag is Texture2D tagged and not null)
+		{
+			originalTexture = tagged;
+		}
+		_target.Tag = originalTexture;
 		_wasPrepared = true;
 	}
 }

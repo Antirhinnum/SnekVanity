@@ -32,7 +32,7 @@ public sealed class GlowPaintDyeItem : ACustomDyeItem
 		for (int i = 0; i < glowPaintDyePlayer.fullbrightDrawData.Count; i++)
 		{
 			DrawData data = glowPaintDyePlayer.fullbrightDrawData[i];
-			if (data.texture.Bounds == texture.Bounds && data.sourceRect == sourceRectangle)
+			if ((data.texture == texture || data.texture == texture.Tag) && data.sourceRect == sourceRectangle)
 			{
 				color = data.color;
 				glowPaintDyePlayer.fullbrightDrawData.RemoveAt(i);
@@ -75,6 +75,11 @@ public sealed class GlowPaintDyeItem : ACustomDyeItem
 		Texture2D indicatorTexture = TextureAssets.Cursors[CursorOverrideID.FavoriteStar].Value;
 		Rectangle indicatorFrame = indicatorTexture.Frame();
 		spriteBatch.Draw(indicatorTexture, itemDrawPosition + indicatorOffset + (frame.Size().RotatedBy(rotation) * 0.45f * Item.scale), indicatorFrame, alphaColor, rotation, indicatorFrame.Size() / 2f, 0.5f, SpriteEffects.None, 0f);
+	}
+
+	public override ushort GetUniqueDyeIndex()
+	{
+		return 0;
 	}
 
 	/// <summary>

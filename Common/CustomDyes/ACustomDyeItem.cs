@@ -15,24 +15,21 @@ public abstract class ACustomDyeItem : ModItem
 {
 	private static Asset<Effect> _pixelShaderAsset;
 
-	internal int cachedDataIndex;
-
 	/// <summary>
 	/// The unique registered shader index of this item's shader.
 	/// </summary>
 	protected internal int UniqueShaderIndex { get; private set; } = -1;
 
-	[field: CloneByReference]
-	/// <summary>
-	/// The <see cref="ArmorShaderData"/> associated with this item.
-	/// </summary>
-	protected ArmorShaderData ShaderData { get; private set; }
-
 	/// <summary>
 	/// Determines if this dye has any active effects / should do anything.
 	/// <br/> If <see langword="false"/>, anything drawn with this item's <see cref="Item.dye"/> value will be given no shader.
 	/// </summary>
+	/// <remarks>
+	/// This should either be a constant value, or a value that can change <i>in-game</i>. Checking, say, <see cref="Main.gameMenu"/> will not work, since the item won't know when to update its dye value.
+	/// </remarks>
 	public abstract bool HasAnyEffects { get; }
+
+	protected override bool CloneNewInstances => true;
 
 	public ACustomDyeItem()
 	{
@@ -42,6 +39,14 @@ public abstract class ACustomDyeItem : ModItem
 	~ACustomDyeItem()
 	{
 		UncacheSelf();
+	}
+
+	public override ModItem Clone(Item newEntity)
+	{
+		ACustomDyeItem newItem = base.Clone(newEntity) as ACustomDyeItem;
+		newItem.UniqueShaderIndex = GameShaders.Armor.GetShaderIdFromItemId(Type);
+		CacheSelf();
+		return newItem;
 	}
 
 	public override void Unload()
@@ -93,13 +98,12 @@ public abstract class ACustomDyeItem : ModItem
 			if (v != 0)
 			{
 				UniqueShaderIndex = v;
-				ShaderData = GameShaders.Armor.GetShaderFromItemId(Type);
 			}
 		}
 
 		return UniqueShaderIndex == -1
 			? 0
-			: (int)(((uint)UniqueShaderIndex << 16) | (ushort)cachedDataIndex);
+			: (int)(((uint)UniqueShaderIndex << 16) | GetUniqueDyeIndex());
 	}
 
 	/// <summary>
@@ -111,6 +115,13 @@ public abstract class ACustomDyeItem : ModItem
 	/// <param name="associatedPlayer">The <see cref="Player"/> associated with this drawing.</param>
 	/// <param name="sourceRectangle">The frame of the texture being drawn.</param>
 	public abstract void ModifyDrawData(ref Texture2D texture, ref Color color, ref int shader, Player associatedPlayer, Rectangle? sourceRectangle = null);
+
+	/// <summary>
+	/// Retrieves the unique index that sets this dye item apart from others of the same type.
+	/// If all dye items of this type behave the same, return the same value.
+	/// </summary>
+	/// <returns></returns>
+	public abstract ushort GetUniqueDyeIndex();
 
 	/// <summary>
 	/// Caches this dye so that it works. If you hold onto any <see cref="Item"/> references, override this method (remember to call base!) and cache those items if they're also <see cref="ACustomDyeItem"/>s.

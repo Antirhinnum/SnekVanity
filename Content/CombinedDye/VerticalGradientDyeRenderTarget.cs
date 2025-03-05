@@ -122,6 +122,12 @@ public sealed class VerticalGradientDyeRenderTarget : ACachedRenderTarget<Vertic
 
 		spriteBatch.End();
 		device.SetRenderTarget(null);
+		Texture2D originalTexture = data.Texture;
+		while (originalTexture.Tag is Texture2D tagged and not null)
+		{
+			originalTexture = tagged;
+		}
+		_target.Tag = originalTexture;
 		_wasPrepared = true;
 	}
 }

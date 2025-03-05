@@ -53,4 +53,9 @@ public sealed class EchoCoatingAlwaysDyeItem : ACustomDyeItem
 		Rectangle indicatorFrame = indicatorTexture.Frame();
 		spriteBatch.Draw(indicatorTexture, itemDrawPosition + indicatorOffset + (frame.Size().RotatedBy(rotation) * 0.45f * Item.scale), indicatorFrame, Color.Lerp(alphaColor, Color.Blue, 0.5f), rotation, indicatorFrame.Size() / 2f, 0.5f, SpriteEffects.None, 0f);
 	}
+
+	public override ushort GetUniqueDyeIndex()
+	{
+		return 0;
+	}
 }

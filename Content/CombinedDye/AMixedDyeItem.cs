@@ -117,7 +117,6 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 			}
 		}
 
-		bool uselessDyeCheck = CanAcceptUselessDye && Main.mouseItem?.ModItem is UselessDyeItem;
 		if (!ItemIsValid(Main.mouseItem))
 		{
 			for (int i = MAX_DYES_LIMIT - 1; i >= 0; i--)
@@ -173,8 +172,8 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 		Texture2D fluidTexture = _assetsByType[Type].Fluid.Value;
 		Color fluidColor = drawColor;
-		int shader = 0;
-		ModifyDrawData(ref fluidTexture, ref fluidColor, ref shader, Main.LocalPlayer, frame);
+		int shader = Item.dye;
+		CustomDyeHooks.ModifyDrawData(ref fluidTexture, ref fluidColor, ref shader, Main.LocalPlayer, frame);
 
 		DrawData data = new(fluidTexture, position, frame, fluidColor, 0f, origin, scale, SpriteEffects.None)
 		{
@@ -214,8 +213,8 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 		Texture2D fluidTexture = _assetsByType[Type].Fluid.Value;
 		Color fluidColor = alphaColor;
-		int shader = 0;
-		ModifyDrawData(ref fluidTexture, ref fluidColor, ref shader, Main.LocalPlayer, frame);
+		int shader = Item.dye;
+		CustomDyeHooks.ModifyDrawData(ref fluidTexture, ref fluidColor, ref shader, Main.LocalPlayer, frame);
 
 		DrawData data = new(fluidTexture, drawPosition, frame, fluidColor, rotation, origin, scale, SpriteEffects.None)
 		{
@@ -277,6 +276,7 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 
 	public override ModItem Clone(Item newEntity)
 	{
+		CacheSelf();
 		AMixedDyeItem newItem = base.Clone(newEntity) as AMixedDyeItem;
 		newItem.dyeItems = new Item[MAX_DYES_LIMIT];
 		for (int i = 0; i < MAX_DYES_LIMIT; i++)
@@ -377,5 +377,16 @@ public abstract class AMixedDyeItem : ACustomDyeItem
 				customDye.UncacheSelf();
 			}
 		}
+	}
+
+	public override ushort GetUniqueDyeIndex()
+	{
+		HashCode hash = new();
+		foreach (Item item in dyeItems.Where(ItemIsValid))
+		{
+			hash.Add(item.dye);
+		}
+		ushort hashFinal = (ushort)(hash.ToHashCode() & 0xFFFF);
+		return (ushort)(hash.ToHashCode() & 0xFFFF);
 	}
 }
