@@ -1,4 +1,5 @@
-﻿using SnekVanity.Common.ShopSelling;
+﻿using SnekVanity.Common.EquipDuplicateAccessories;
+using SnekVanity.Common.ShopSelling;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -68,6 +69,11 @@ public sealed class DisplayDollAccessoryStackingItem : ModItem, IAmSoldByVanilla
 		}
 	}
 
+	public override void SetStaticDefaults()
+	{
+		EquipDuplicateAccessoriesSystem.AccessoryEquippableMultipleTimes[Type] = true;
+	}
+
 	public override void SetDefaults()
 	{
 		Item.DefaultToAccessory();
@@ -99,7 +105,7 @@ public sealed class DisplayDollAccessoryStackingItem : ModItem, IAmSoldByVanilla
 		{
 			Main.mouseItem = ItemLoader.TransferWithLimit(topItem, topItem.stack);
 		}
-		else if (Main.mouseItem?.accessory == true && Main.mouseItem.ModItem is not DisplayDollAccessoryStackingItem) // No recursion
+		else if (Main.mouseItem != null && !Main.mouseItem.IsAir && Main.mouseItem.accessory && Main.mouseItem.ModItem is not DisplayDollAccessoryStackingItem) // No recursion
 		{
 			Item itemToStore = ItemLoader.TransferWithLimit(Main.mouseItem, Main.mouseItem.stack);
 			StoredItems.Push(itemToStore);

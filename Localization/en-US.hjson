@@ -239,6 +239,7 @@ Mods: {
 					<right> this item with an accessory in hand to add it
 					<right> this item with an empty hand to take an accessory out
 					All contained accesories will be dyed the same as this item
+					Multiple copies of this accessory can be equipped at once
 					[c/FF0000:Can only be equipped in vanity slots or by (wom)annequins.]
 					'''
 				ContainsTooltip: "Contains the following accessories: "

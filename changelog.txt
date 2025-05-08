@@ -1,3 +1,4 @@
 Snek's Misc. Vanity Version v{ModVersion}
 
-[list][*]Added a config option to disable resprites for the Magic Quiver, Molten Quiver, and Stalker's Quiver.[/list]
+[list][*]Added a config option to disable resprites for the Magic Quiver, Molten Quiver, and Stalker's Quiver.
+[*]Multiple copies of the Accessory Sack can now be worn at once.[/list]
