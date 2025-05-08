@@ -295,6 +295,11 @@ Mods: {
 					Label: Show Sheaths When Held
 					Tooltip: ""
 				}
+
+				UseRespritedQuivers: {
+					Label: Use Resprited Quivers
+					Tooltip: If enabled, the Magic Quiver, Molten Quiver, and Stalker's Quiver will be resprited. Disabling this option will not remove the added equip slot for the Endless Quiver.
+				}
 			}
 		}
 	}

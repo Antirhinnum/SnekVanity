@@ -1,13 +1,3 @@
 Snek's Misc. Vanity Version v{ModVersion}
 
-[list][*]Added equip textures for the following items:[list][*]Katana[*]Muramasa[*]Cobalt Sword[*]Candy Cane Sword[*]All Phaseblades and Phasesabers[/list]
-Equip the weapons in your social accessory slots to hold them!
-[*]Held weapon sprites now show if you're holding the weapon, not just if you've equipped it. This can be disabled in the config.
-[*]Resprited vanilla's quiver equips and added a new equip for the Endless Quiver.
-[*]Added dye versions of the Illuminant and Echo Coatings. Echo Coating has two versions: One that shows with echo sight, and one that doesn't.
-[*]DIY Dyes can now be included in other DIY dyes. The effects may take a few frames to fully apply.
-[*]The Vertical and Horizontal DIY Gradient Dyes can now accept up to four dyes each. The Overlaid DIY Dye still only accepts two dyes -- if you wish to layer more, insert the Overlaid Dye into another Overlaid Dye.
-[*](Hopefully) fixed a rare crash associated with DIY dyes.
-[*]Fixed an overzealous fix for some starnge hair dye logic making the DIY Hair Dye not work properly sometimes (e.g., wearing a small asymmetric head equip when using the "Asymmetric Equipment" mod).
-[*](Hopefully) fixed the DIY Vertical Gradient Dye having strange effects on headgear while moving.
-[*]Added a new mod call, "GetConfigOption".[/list]
+[list][*]Added a config option to disable resprites for the Magic Quiver, Molten Quiver, and Stalker's Quiver.[/list]

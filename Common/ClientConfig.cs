@@ -15,4 +15,8 @@ public sealed class ClientConfig : ModConfig
 
 	[DefaultValue(true)]
 	public bool ShowSheathsWhenHeld;
+
+	[DefaultValue(true)]
+	[ReloadRequired]
+	public bool UseRespritedQuivers;
 }
